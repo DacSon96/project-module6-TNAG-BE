@@ -3,28 +3,26 @@ package com.codegym.project.food;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Service
-public class FoodService implements IFoodService{
+public class DishService implements IDishService {
     @Autowired
-    private IFoodRepository foodRepository;
+    private IDishRepository foodRepository;
 
     @Override
-    public Page<Food> findAll(Pageable pageable) {
+    public Page<Dish> findAll(Pageable pageable) {
         return foodRepository.findAll(pageable);
     }
 
     @Override
-    public Optional<Food> findById(Long id) {
+    public Optional<Dish> findById(Long id) {
         return foodRepository.findById(id);
     }
 
     @Override
-    public Food save(Food food) {
-        return foodRepository.save(food);
+    public Dish save(Dish dish) {
+        return foodRepository.save(dish);
     }
 
     @Override
@@ -33,12 +31,12 @@ public class FoodService implements IFoodService{
     }
 
     @Override
-    public Page<Food> findAllByNameContaining(String name, Pageable pageable) {
+    public Page<Dish> findAllByNameContaining(String name, Pageable pageable) {
         return foodRepository.findAllByNameContaining(name,pageable);
     }
 
     @Override
-    public Optional<Food> findByName(String name) {
+    public Optional<Dish> findByName(String name) {
         return foodRepository.findByName(name);
     }
 }

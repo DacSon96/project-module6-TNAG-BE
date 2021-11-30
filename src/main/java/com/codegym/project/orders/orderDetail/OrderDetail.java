@@ -1,6 +1,6 @@
 package com.codegym.project.orders.orderDetail;
 
-import com.codegym.project.food.Food;
+import com.codegym.project.food.Dish;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -14,7 +14,7 @@ OrderDetail {
     private Long id;
 
     @ManyToOne
-    private Food food;
+    private Dish dish;
 
     @Column(nullable = false)
     private double price;
@@ -27,9 +27,9 @@ OrderDetail {
     public OrderDetail() {
     }
 
-    public OrderDetail(Long id, Food food, double price, int quantity) {
+    public OrderDetail(Long id, Dish dish, double price, int quantity) {
         this.id = id;
-        this.food = food;
+        this.dish = dish;
         this.price = price;
         this.quantity = quantity;
         this.total = price*quantity;

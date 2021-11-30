@@ -62,4 +62,14 @@ public class MerchantProfileController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<MerchantProfile> update(@PathVariable Long id, @RequestBody MerchantProfile merchantProfile) {
+        Optional<MerchantProfile> merchantProfileOptional = merchantProfileService.findById(id);
+        if (!merchantProfileOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        merchantProfile.setId(id);
+        merchantProfileService.save(merchantProfile);
+        return new ResponseEntity<>(merchantProfile, HttpStatus.OK);
+    }
 }

@@ -29,11 +29,10 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     private List<Role> roles;
 
     @OneToOne
-    @Column(nullable = false)
     private UserProfile userProfile;
 
     @OneToOne

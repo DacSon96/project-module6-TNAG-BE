@@ -1,8 +1,8 @@
 package com.codegym.project.security.custom;
 
 
-import com.casestudyecommerce.security.JwtService;
-import com.casestudyecommerce.user.users.IUserService;
+import com.codegym.project.security.JwtService;
+import com.codegym.project.users.users.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;

@@ -1,7 +1,7 @@
 package com.codegym.project.security;
 
 
-import com.casestudyecommerce.security.model.UserPrinciple;
+import com.codegym.project.security.model.UserPrinciple;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -3,6 +3,7 @@ package com.codegym.project.security.config;
 import com.codegym.project.security.custom.CustomAccessDeniedHandler;
 import com.codegym.project.security.custom.JwtAuthenticationFilter;
 import com.codegym.project.security.custom.RestAuthenticationEntryPoint;
+import com.codegym.project.users.users.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

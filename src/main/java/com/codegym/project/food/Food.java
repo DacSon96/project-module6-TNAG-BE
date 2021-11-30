@@ -26,7 +26,6 @@ public class Food {
     private String description;
 
     @ManyToOne
-    @Column(nullable = false)
     private User merchant;
 
     @Column(columnDefinition = "true")

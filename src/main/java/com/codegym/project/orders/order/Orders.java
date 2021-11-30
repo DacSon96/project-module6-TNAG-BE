@@ -29,7 +29,6 @@ public class Orders {
     private double totalPayment;
 
     @ManyToOne
-    @Column(nullable = false)
     private OrderStatus orderStatus;
 
     @ManyToOne
@@ -39,7 +38,6 @@ public class Orders {
     private User shipper;
 
     @ManyToOne
-    @Column(nullable = false)
     private PaymentMethod paymentMethod;
 
 }

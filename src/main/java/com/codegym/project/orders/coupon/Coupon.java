@@ -3,10 +3,7 @@ package com.codegym.project.orders.coupon;
 import com.codegym.project.orders.couponType.CouponType;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -21,5 +18,6 @@ public class Coupon {
 
     private String description;
 
+    @ManyToOne
     private CouponType type;
 }

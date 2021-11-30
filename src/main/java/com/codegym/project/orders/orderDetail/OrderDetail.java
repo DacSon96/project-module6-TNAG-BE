@@ -7,7 +7,8 @@ import javax.persistence.*;
 
 @Entity
 @Data
-public class OrderDetail {
+public class
+OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -15,8 +16,10 @@ public class OrderDetail {
     @ManyToOne
     private Food food;
 
+    @Column(nullable = false)
     private double price;
 
+    @Column(columnDefinition = "1")
     private int quantity;
 
     private double total;

@@ -16,8 +16,7 @@ public class MerchantProfile {
 
     private String address;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @Column(nullable = false)
+    @ManyToMany
     private List<Category> categories;
 
     @Column(nullable = false)

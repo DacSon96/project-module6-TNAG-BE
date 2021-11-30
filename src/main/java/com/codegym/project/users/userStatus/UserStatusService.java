@@ -31,4 +31,9 @@ public class UserStatusService implements IUserStatusService{
     public void deleteById(Long id) {
         userStatusRepository.deleteById(id);
     }
+
+    @Override
+    public UserStatus findByName(String name) {
+        return userStatusRepository.findByName(name);
+    }
 }

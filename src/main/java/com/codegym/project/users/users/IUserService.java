@@ -5,6 +5,9 @@ import com.codegym.project.role.Role;
 import com.codegym.project.role.Role;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import com.codegym.project.users.userStatus.UserStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
@@ -14,4 +17,6 @@ public interface IUserService extends IGeneralService<User>, UserDetailsService 
     Page<User> findAllByRolesContaining (Role role, Pageable pageable);
 
     User findByRolesContainingAndId(Role role, Long id);
+
+    Page<User> findAllByRolesContainingAndUserStatus(Role role, UserStatus status,Pageable pageable);
 }

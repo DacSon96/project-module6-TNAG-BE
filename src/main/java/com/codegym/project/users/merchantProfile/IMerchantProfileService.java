@@ -1,4 +1,4 @@
-package com.codegym.project.users.merchantProfile.service;
+package com.codegym.project.users.merchantProfile;
 
 import com.codegym.project.IGeneralService;
 import com.codegym.project.users.merchantProfile.MerchantProfile;

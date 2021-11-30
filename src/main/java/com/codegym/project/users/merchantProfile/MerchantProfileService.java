@@ -1,7 +1,5 @@
-package com.codegym.project.users.merchantProfile.service;
+package com.codegym.project.users.merchantProfile;
 
-import com.codegym.project.users.merchantProfile.MerchantProfile;
-import com.codegym.project.users.merchantProfile.repository.IMerchantProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

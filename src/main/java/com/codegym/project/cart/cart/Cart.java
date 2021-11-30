@@ -1,4 +1,4 @@
-package com.codegym.project.cart;
+package com.codegym.project.cart.cart;
 
 import com.codegym.project.users.users.User;
 import lombok.Data;

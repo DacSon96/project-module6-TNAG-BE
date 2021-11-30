@@ -7,6 +7,5 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 public interface IUserService extends IGeneralService<User>, UserDetailsService {
     User findByUsername(String username);
 
-    Iterable<User> findAllByRoles(Role role);
-
+    User findByRolesContainingAndId(Role role, Long id);
 }

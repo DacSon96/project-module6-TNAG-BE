@@ -27,6 +27,7 @@ public class UserProfileService implements IUserProfileService {
         return userProfileRepository.save(userProfile);
     }
 
+    
     @Override
     public void deleteById(Long id) {
         userProfileRepository.deleteById(id);

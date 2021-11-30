@@ -2,6 +2,7 @@ package com.codegym.project.users.users;
 
 import com.codegym.project.role.Role;
 import com.codegym.project.security.model.UserPrinciple;
+import com.codegym.project.users.userStatus.UserStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,9 +21,15 @@ public class UserService implements IUserService {
 
 
     @Override
-    public Page<User> findByRolesContainingAndId(Role role, Long id,Pageable pageable) {
-        return userRepository.findByRolesContainingAndId(role, id,pageable);
+    public User findByRolesContainingAndId(Role role, Long id) {
+        return userRepository.findByRolesContainingAndId(role, id);
     }
+
+    @Override
+    public Page<User> findAllByRolesContainingAndUserStatus(Role role, UserStatus status, Pageable pageable) {
+        return userRepository.findAllByRolesContainingAndUserStatus(role,status,pageable);
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

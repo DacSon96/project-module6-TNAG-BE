@@ -13,17 +13,17 @@ public class UserAddressService implements IUserAddressService {
     private IUserAddressRepository userAddressRepository;
 
     @Override
-    public Page<UserAddress> findAll(Pageable pageable) {
+    public Page<UserDeliverAddress> findAll(Pageable pageable) {
         return userAddressRepository.findAll(pageable);
     }
 
     @Override
-    public Optional<UserAddress> findById(Long id) {
+    public Optional<UserDeliverAddress> findById(Long id) {
         return userAddressRepository.findById(id);
     }
 
     @Override
-    public UserAddress save(UserAddress userAddress) {
+    public UserDeliverAddress save(UserDeliverAddress userAddress) {
         return userAddressRepository.save(userAddress);
     }
 

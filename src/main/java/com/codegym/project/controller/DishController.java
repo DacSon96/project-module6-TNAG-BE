@@ -1,7 +1,7 @@
 package com.codegym.project.controller;
 
-import com.codegym.project.food.Food;
-import com.codegym.project.food.IFoodService;
+import com.codegym.project.food.Dish;
+import com.codegym.project.food.IDishService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,15 +11,14 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/foods")
-public class FoodController {
+@RequestMapping("/dishes")
+public class DishController {
     @Autowired
-    private IFoodService foodService;
+    private IDishService dishService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Food> findById(@PathVariable Long id) {
-        Optional<Food> food = foodService.findById(id);
-
+    public ResponseEntity<Dish> findById(@PathVariable Long id) {
+        Optional<Dish> food = dishService.findById(id);
         if (!food.isPresent()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

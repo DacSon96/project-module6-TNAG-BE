@@ -13,10 +13,16 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserService implements IUserService{
+public class UserService implements IUserService {
     @Override
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+
+    @Override
+    public User findByRolesContainingAndId(Role role, Long id) {
+        return userRepository.findByRolesContainingAndId(role, id);
     }
 
     @Override

@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Data
-public class Food {
+public class Dish {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

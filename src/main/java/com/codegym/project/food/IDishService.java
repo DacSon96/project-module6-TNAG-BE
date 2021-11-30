@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
-public interface IFoodService extends IGeneralService<Food> {
-    Page<Food> findAllByNameContaining(String name, Pageable pageable);
-    Optional<Food> findByName(String name);
+public interface IDishService extends IGeneralService<Dish> {
+    Page<Dish> findAllByNameContaining(String name, Pageable pageable);
+    Optional<Dish> findByName(String name);
 }

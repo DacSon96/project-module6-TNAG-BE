@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface IFoodRepository extends JpaRepository<Food, Long> {
-    Page<Food> findAllByNameContaining(String name, Pageable pageable);
-    Optional<Food> findByName(String name);
+public interface IDishRepository extends JpaRepository<Dish, Long> {
+    Page<Dish> findAllByNameContaining(String name, Pageable pageable);
+    Optional<Dish> findByName(String name);
 }

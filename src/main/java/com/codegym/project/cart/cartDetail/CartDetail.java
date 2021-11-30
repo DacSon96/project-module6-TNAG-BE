@@ -1,6 +1,6 @@
 package com.codegym.project.cart.cartDetail;
 
-import com.codegym.project.cart.Cart;
+import com.codegym.project.cart.cart.Cart;
 import com.codegym.project.food.Food;
 import lombok.Data;
 

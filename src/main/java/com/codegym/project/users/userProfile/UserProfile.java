@@ -1,0 +1,26 @@
+package com.codegym.project.users.userProfile;
+
+import lombok.Data;
+
+import javax.persistence.*;
+import javax.validation.constraints.Size;
+
+@Entity
+@Data
+public class UserProfile {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    @Size(min = 8, max = 20)
+    private String fullName;
+
+    @Column(nullable = false, unique = true)
+    @Size(min = 10, max = 11)
+    private String phone;
+
+    private String avatar;
+
+    private String sex;
+}

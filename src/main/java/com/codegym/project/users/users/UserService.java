@@ -2,6 +2,7 @@ package com.codegym.project.users.users;
 
 import com.codegym.project.role.Role;
 import com.codegym.project.security.model.UserPrinciple;
+import com.codegym.project.users.userStatus.UserStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,6 +25,17 @@ public class UserService implements IUserService {
     public User findByRolesContainingAndId(Role role, Long id) {
         return userRepository.findByRolesContainingAndId(role, id);
     }
+
+    @Override
+    public Page<User> findAllByRolesContaining(Role role,Pageable pageable) {
+        return userRepository.findAllByRolesContaining(role, pageable);
+    }
+
+    @Override
+    public Page<User> findAllByRolesContainingAndUserStatus(Role role, UserStatus status, Pageable pageable) {
+        return userRepository.findAllByRolesContainingAndUserStatus(role,status,pageable);
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

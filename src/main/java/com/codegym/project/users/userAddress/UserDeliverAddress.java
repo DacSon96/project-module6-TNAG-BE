@@ -8,14 +8,14 @@ import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Data
-public class UserAddress {
+public class UserDeliverAddress {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
     @NotEmpty
-    private String name;
+    private String customerName;
 
     @Column(nullable = false)
     @NotEmpty

@@ -1,5 +1,6 @@
 package com.codegym.project.users.users;
 
+import com.codegym.project.role.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -15,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/merchant")
+@CrossOrigin("*")
 public class MerchantProfileController {
     @Autowired
     private IMerchantProfileService merchantProfileService;

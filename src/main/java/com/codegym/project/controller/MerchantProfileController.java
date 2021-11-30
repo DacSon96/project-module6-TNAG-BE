@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.codegym.project.users.merchantProfile.MerchantProfile;
-import com.codegym.project.users.merchantProfile.service.IMerchantProfileService;
+import com.codegym.project.users.merchantProfile.IMerchantProfileService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -48,7 +48,8 @@ public class MerchantProfileController {
             sortable = Sort.by("id").descending();
         }
         Pageable pageable = PageRequest.of(page, size, sortable);
-        Page<MerchantProfile> merchantProfilePage = merchantProfileService.findAll(pageable);
+        Role merchantRole = roleService.findByName("merchant");
+        Page<User> MerchantPage = userService.findByRolesContainingAndId()
         return new ResponseEntity<>(merchantProfilePage, HttpStatus.OK);
     }
 

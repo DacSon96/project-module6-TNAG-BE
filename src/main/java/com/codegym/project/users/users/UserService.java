@@ -20,13 +20,8 @@ public class UserService implements IUserService {
 
 
     @Override
-    public User findByRolesContainingAndId(Role role, Long id) {
-        return userRepository.findByRolesContainingAndId(role, id);
-    }
-
-    @Override
-    public Iterable<User> findAllByRoles(Role role) {
-        return userRepository.findAllByRolesContaining(role);
+    public Page<User> findByRolesContainingAndId(Role role, Long id,Pageable pageable) {
+        return userRepository.findByRolesContainingAndId(role, id,pageable);
     }
 
     @Override

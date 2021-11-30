@@ -26,12 +26,10 @@ public class MerchantRestController {
     private IRoleService roleService;
 
     @GetMapping
-    public ResponseEntity<Page<User>> findAllByRoleMerchants(@PageableDefault(sort = "username",size = 5)
-
-                                                                         Pageable pageable){
-        Role role = roleService.findById(1L).get();
+    public ResponseEntity<Page<User>> findAllByRoleMerchants(@PageableDefault(sort = "username", size = 5) Pageable pageable) {
+        Role role = roleService.findByName("ROLE_MERCHANT");
         Page<User> userPage;
-        userPage = userService.findAllByRolesContaining(role,pageable);
+        userPage = userService.findAllByRolesContaining(role, pageable);
         return new ResponseEntity<>(userPage, HttpStatus.OK);
     }
 }

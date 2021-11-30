@@ -1,7 +1,6 @@
 package com.codegym.project.controller;
 import com.codegym.project.security.JwtService;
 import com.codegym.project.security.model.JwtResponse;
-import com.codegym.project.users.UserDto;
 import com.codegym.project.users.users.IUserService;
 import com.codegym.project.users.users.User;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.codegym.project.users.merchantProfile.repository;
+package com.codegym.project.users.merchantProfile;
 
 import com.codegym.project.users.merchantProfile.MerchantProfile;
 import org.springframework.data.domain.Page;

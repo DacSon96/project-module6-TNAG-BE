@@ -1,5 +1,6 @@
 package com.codegym.project.users.users;
 
+import com.codegym.project.role.Role;
 import com.codegym.project.security.model.UserPrinciple;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,11 @@ public class UserService implements IUserService{
     @Override
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public Iterable<User> findAllByRoles(Role role) {
+        return userRepository.findAllByRolesContaining(role);
     }
 
     @Override

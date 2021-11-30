@@ -1,7 +1,12 @@
 package com.codegym.project.controller;
 
+import com.codegym.project.role.IRoleService;
+import com.codegym.project.role.Role;
 import com.codegym.project.users.merchantProfile.MerchantProfile;
-import com.codegym.project.users.merchantProfile.service.IMerchantProfileService;
+import com.codegym.project.users.merchantProfile.IMerchantProfileService;
+import com.codegym.project.users.users.IUserService;
+import com.codegym.project.users.users.User;
+import com.codegym.project.users.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,27 +25,21 @@ public class MerchantProfileController {
     @Autowired
     private IMerchantProfileService merchantProfileService;
 
+    @Autowired
+    private IUserService userService;
+
+    @Autowired
+    private IRoleService roleService;
+
     @GetMapping("/list")
-    public ResponseEntity<Page<MerchantProfile>> getAllMerchant(
-            @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
-            @RequestParam(name = "size", required = false, defaultValue = "5") Integer size,
-            @RequestParam(name = "sort", required = false, defaultValue = "ASC") String sort
-    ){
-        Sort sortable = null;
-        if (sort.equals("ASC")) {
-            sortable = Sort.by("id").ascending();
-        }
-        if (sort.equals("DESC")) {
-            sortable = Sort.by("id").descending();
-        }
-        Pageable pageable = PageRequest.of(page, size, sortable);
-        Page<MerchantProfile> merchantProfilePage = merchantProfileService.findAll(pageable);
-        return new ResponseEntity<>(merchantProfilePage, HttpStatus.OK);
+    public ResponseEntity<Iterable<User>> getAllMerchant(){
+        Optional<Role> merchantRole = roleService.findById(Long.valueOf(1));
+        Iterable<User> userIterable = userService.findAllByRoles(merchantRole.get());
+        return new ResponseEntity<>(userIterable, HttpStatus.OK);
     }
     @GetMapping("/{id}")
     public ResponseEntity<Optional<MerchantProfile>> getMerchantById(@PathVariable Long id){
         Optional<MerchantProfile> merchantProfileOptional = merchantProfileService.findById(id);
         return new ResponseEntity<>(merchantProfileOptional, HttpStatus.OK);
     }
-
 }

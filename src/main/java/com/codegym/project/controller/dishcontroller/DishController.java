@@ -28,22 +28,13 @@ public class DishController {
     private IRoleService roleService;
 
     @GetMapping("/dishes/merchant/{id}")
-    public ResponseEntity<Page<Dish>> findAllDishesByMechant(@PathVariable("id") Long id, Pageable pageable){
-//        Optional<User> userOptional = userService.findById(id);
-//        if (!userOptional.isPresent()){
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }else if (!userOptional.get().getRoles().equals("ROLE_MERCHANT")){
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }else {
-//            Page<Dish> dishPage= dishService.findDishByMerchant(userOptional.get(),pageable);
-//            return new ResponseEntity<>( dishPage,HttpStatus.OK);
-//        }
+    public ResponseEntity<Page<Dish>> findAllDishesByMechant(@PathVariable("id") Long id, Pageable pageable) {
         Role role = roleService.findByName("ROLE_MERCHANT");
         User user = userService.findByRolesContainingAndId(role, id);
-        if(user == null){
+        if (user == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }else {
-            Page<Dish> dishPage= dishService.findDishByMerchant(user, pageable);
+        } else {
+            Page<Dish> dishPage = dishService.findDishByMerchant(user, pageable);
             return new ResponseEntity<>(dishPage, HttpStatus.OK);
         }
 
@@ -52,9 +43,9 @@ public class DishController {
     @GetMapping("/{id}")
     public ResponseEntity<Dish> findById(@PathVariable Long id) {
         Optional<Dish> food = dishService.findById(id);
-        if (!food.isPresent()){
+        if (!food.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(food.get(),HttpStatus.OK);
+        return new ResponseEntity<>(food.get(), HttpStatus.OK);
     }
 }

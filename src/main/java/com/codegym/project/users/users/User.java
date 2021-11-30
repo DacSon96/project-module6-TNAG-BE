@@ -3,6 +3,7 @@ package com.codegym.project.users.users;
 import com.codegym.project.role.Role;
 import com.codegym.project.users.merchantProfile.MerchantProfile;
 import com.codegym.project.users.userProfile.UserProfile;
+import com.codegym.project.users.userStatus.UserStatus;
 import io.micrometer.core.lang.Nullable;
 import lombok.Data;
 
@@ -37,4 +38,7 @@ public class User {
 
     @OneToOne
     private MerchantProfile merchantProfile;
+
+    @ManyToOne
+    private UserStatus userStatus;
 }

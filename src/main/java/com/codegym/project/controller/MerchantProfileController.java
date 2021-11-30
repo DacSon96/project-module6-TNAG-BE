@@ -56,6 +56,9 @@ public class MerchantProfileController {
     public ResponseEntity<User> getById(@PathVariable Long id) {
         Role role = roleService.findByName("ROLE_MERCHANT");
         User user = userService.findByRolesContainingAndId(role, id);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 

@@ -27,7 +27,7 @@ public class Dish {
 
     @ManyToOne
     private User merchant;
-
-    @Column(columnDefinition = "true")
+//    De @column thi loi k hien thi o Database
+//    @Column(columnDefinition = "true")
     private Boolean status;
 }

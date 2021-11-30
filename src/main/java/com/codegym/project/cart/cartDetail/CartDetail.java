@@ -1,7 +1,7 @@
 package com.codegym.project.cart.cartDetail;
 
 import com.codegym.project.cart.cart.Cart;
-import com.codegym.project.food.Food;
+import com.codegym.project.food.Dish;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -14,7 +14,7 @@ public class CartDetail {
     private Long id;
 
     @ManyToOne
-    private Food food;
+    private Dish dish;
 
     @ManyToOne
     private Cart cart;

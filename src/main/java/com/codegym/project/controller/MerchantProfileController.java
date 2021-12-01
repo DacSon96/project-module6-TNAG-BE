@@ -14,6 +14,8 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.codegym.project.users.merchantProfile.MerchantProfile;
+import com.codegym.project.users.merchantProfile.IMerchantProfileService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +25,12 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/merchant")
+@RequestMapping("/merchants")
 @CrossOrigin("*")
 public class MerchantProfileController {
+
+    @Autowired
+    private IMerchantProfileService merchantProfileService;
 
     @Autowired
     private IUserService userService;
@@ -36,7 +41,6 @@ public class MerchantProfileController {
     @Autowired
     private IUserStatusService userStatusService;
 
-//    @Secured("ROLE_ADMIN")
     @GetMapping("/pending")
     public ResponseEntity<Page<User>> getAllMerchantPendingApproval(
             @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
@@ -68,5 +72,26 @@ public class MerchantProfileController {
         userService.save(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getById(@PathVariable Long id) {
+        Role role = roleService.findByName("ROLE_MERCHANT");
+        User user = userService.findByRolesContainingAndId(role, id);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<MerchantProfile> update(@PathVariable Long id, @RequestBody MerchantProfile merchantProfile) {
+        Optional<MerchantProfile> merchantProfileOptional = merchantProfileService.findById(id);
+        if (!merchantProfileOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        merchantProfile.setId(id);
+        merchantProfileService.save(merchantProfile);
+        return new ResponseEntity<>(merchantProfile, HttpStatus.OK);
+    }
+
 
 }

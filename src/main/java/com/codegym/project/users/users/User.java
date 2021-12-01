@@ -6,6 +6,7 @@ import com.codegym.project.users.userProfile.UserProfile;
 import com.codegym.project.users.userStatus.UserStatus;
 import io.micrometer.core.lang.Nullable;
 import lombok.Data;
+import org.hibernate.annotations.CollectionType;
 
 import javax.persistence.*;
 import javax.validation.constraints.Null;
@@ -23,7 +24,7 @@ public class User {
     @Size(min = 5, max = 20)
     private String username;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "text")
     private String password;
 
     @Column(nullable = false, unique = true)

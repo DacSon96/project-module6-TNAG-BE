@@ -1,7 +1,7 @@
 package com.codegym.project.cart.cartDetail;
 
 import com.codegym.project.cart.cart.Cart;
-import com.codegym.project.food.Dish;
+import com.codegym.project.dish.Dish;
 import lombok.Data;
 
 import javax.persistence.*;

@@ -1,4 +1,4 @@
-package com.codegym.project.food;
+package com.codegym.project.dish;
 
 import lombok.Data;
 import com.codegym.project.users.users.User;
@@ -28,6 +28,5 @@ public class Dish {
     @ManyToOne
     private User merchant;
 
-    @Column(columnDefinition = "true")
     private Boolean status;
 }

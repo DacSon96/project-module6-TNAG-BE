@@ -4,6 +4,7 @@ import com.codegym.project.dish.Dish;
 import com.codegym.project.dish.DishService;
 import com.codegym.project.role.IRoleService;
 import com.codegym.project.role.Role;
+import com.codegym.project.role.RoleConst;
 import com.codegym.project.users.users.User;
 import com.codegym.project.users.users.UserService;
 import com.codegym.project.dish.Dish;
@@ -44,7 +45,7 @@ public class DishController {
     @GetMapping("/merchant/{id}")
     public ResponseEntity<Page<Dish>> findAllDishesByMechant(@RequestParam(name = "q")Optional<String> q,
                                                                  @PathVariable("id") Long id, Pageable pageable) {
-        Role role = roleService.findByName("ROLE_MERCHANT");
+        Role role = roleService.findByName(RoleConst.MERCHANT);
         User user = userService.findByRolesContainingAndId(role, id);
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

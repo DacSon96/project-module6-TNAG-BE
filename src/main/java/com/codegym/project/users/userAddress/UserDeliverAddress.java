@@ -28,6 +28,9 @@ public class UserDeliverAddress {
     @ManyToOne
     private User user;
 
+    @Column(nullable = false)
+    private String address;
+
     public UserDeliverAddress(String customerName, String phone, User user) {
         this.customerName = customerName;
         this.phone = phone;

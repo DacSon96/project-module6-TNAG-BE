@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/merchantslist")
+@RequestMapping("/merchants")
 public class MerchantRestController {
     @Autowired
     private UserService userService;

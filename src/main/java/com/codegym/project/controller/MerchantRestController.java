@@ -1,4 +1,4 @@
-package com.codegym.project.controller.merchantrestcontroller;
+package com.codegym.project.controller;
 
 import com.codegym.project.role.IRoleService;
 import com.codegym.project.role.Role;

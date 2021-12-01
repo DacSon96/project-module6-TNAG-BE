@@ -8,10 +8,9 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class UserAddressService implements IUserAddressService {
+public class UserAddressService implements IUserAddressService{
     @Autowired
-    private IUserAddressRepository userAddressRepository;
-
+    IUserAddressRepository userAddressRepository;
     @Override
     public Page<UserDeliverAddress> findAll(Pageable pageable) {
         return userAddressRepository.findAll(pageable);
@@ -23,12 +22,12 @@ public class UserAddressService implements IUserAddressService {
     }
 
     @Override
-    public UserDeliverAddress save(UserDeliverAddress userAddress) {
-        return userAddressRepository.save(userAddress);
+    public UserDeliverAddress save(UserDeliverAddress userDeliverAddress) {
+        return userAddressRepository.save(userDeliverAddress);
     }
 
     @Override
     public void deleteById(Long id) {
-        userAddressRepository.deleteById(id);
+    userAddressRepository.deleteById(id);
     }
 }

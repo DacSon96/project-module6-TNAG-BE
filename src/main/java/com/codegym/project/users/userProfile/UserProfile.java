@@ -23,4 +23,11 @@ public class UserProfile {
     private String avatar;
 
     private String sex;
+
+    public UserProfile(String fullName, String phone, String avatar, String sex) {
+        this.fullName = fullName;
+        this.phone = phone;
+        this.avatar = avatar;
+        this.sex = sex;
+    }
 }

@@ -27,13 +27,23 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Page<User> findAllByRolesContaining(Role role,Pageable pageable) {
+    public Page<User> findAllByRolesContaining(Role role, Pageable pageable) {
         return userRepository.findAllByRolesContaining(role, pageable);
     }
 
     @Override
     public Page<User> findAllByRolesContainingAndUserStatus(Role role, UserStatus status, Pageable pageable) {
-        return userRepository.findAllByRolesContainingAndUserStatus(role,status,pageable);
+        return userRepository.findAllByRolesContainingAndUserStatus(role, status, pageable);
+    }
+
+    @Override
+    public boolean isUserDuplicated(String username) {
+        User optionalUser = userRepository.findByUsername(username);
+        if (optionalUser == null) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
 

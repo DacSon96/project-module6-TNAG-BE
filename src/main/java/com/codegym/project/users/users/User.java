@@ -24,7 +24,6 @@ public class User {
     private String username;
 
     @Column(nullable = false)
-    @Size(min = 6, max = 18)
     private String password;
 
     @Column(nullable = false, unique = true)

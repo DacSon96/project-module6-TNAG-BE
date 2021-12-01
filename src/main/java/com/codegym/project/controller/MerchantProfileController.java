@@ -36,7 +36,7 @@ public class MerchantProfileController {
     @Autowired
     private IUserStatusService userStatusService;
 
-    @Secured("ROLE_MERCHANT")
+//    @Secured("ROLE_ADMIN")
     @GetMapping("/pending")
     public ResponseEntity<Page<User>> getAllMerchantPendingApproval(
             @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,

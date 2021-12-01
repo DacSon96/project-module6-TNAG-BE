@@ -55,15 +55,15 @@ public class MerchantProfileController {
             sortable = Sort.by("id").descending();
         }
         Pageable pageable = PageRequest.of(page, size, sortable);
-        UserStatus status = userStatusService.findByName("pendingApproval");
+        UserStatus status = userStatusService.findByName("approved");
         Role merchantRole = roleService.findByName("ROLE_MERCHANT");
         Page<User> merchantPending = userService.findAllByRolesContainingAndUserStatus(merchantRole, status, pageable);
         return new ResponseEntity<>(merchantPending, HttpStatus.OK);
     }
 
-    @Secured("ROLE_ADMIN")
-    @PutMapping("/updateStatus/{id}/{statusName}")
-    public ResponseEntity<User> approvalById(@PathVariable Long id, @PathVariable String statusName) {
+//    @Secured("ROLE_ADMIN")
+    @GetMapping("/updateStatus/{id}/{statusName}")
+    public ResponseEntity<User> approvalById(@PathVariable("id") Long id, @PathVariable("statusName") String statusName) {
         Optional<User> optionalUser = userService.findById(id);
         UserStatus approvalStatus = userStatusService.findByName(statusName);
         if (!optionalUser.isPresent() || approvalStatus == null) {
@@ -97,6 +97,7 @@ public class MerchantProfileController {
         merchantProfileService.save(merchantProfile);
         return new ResponseEntity<>(merchantProfile, HttpStatus.OK);
     }
+
 
 
 }

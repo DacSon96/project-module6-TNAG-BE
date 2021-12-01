@@ -30,4 +30,10 @@ public class UserProfile {
         this.avatar = avatar;
         this.sex = sex;
     }
+
+    public UserProfile(String fullName, String phone, String sex) {
+        this.fullName = fullName;
+        this.phone = phone;
+        this.sex = sex;
+    }
 }

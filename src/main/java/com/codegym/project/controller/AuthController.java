@@ -54,15 +54,10 @@ public class AuthController {
     private String fileUpload;
 
     @PostMapping("/register")
-    public ResponseEntity<User> createUser(UserForm userForm) throws IOException {
-        MultipartFile multipartFile = userForm.getAvatar();
-        String fileName = multipartFile.getOriginalFilename();
-        FileCopyUtils.copy(userForm.getAvatar().getBytes(), new File(fileUpload + fileName));
-
+    public ResponseEntity<User> createUser(@RequestBody UserForm userForm) throws IOException {
         UserProfile userProfile = new UserProfile(
                 userForm.getFullName(),
                 userForm.getPhone(),
-                fileName,
                 userForm.getSex()
         );
         userProfile = userProfileService.save(userProfile);

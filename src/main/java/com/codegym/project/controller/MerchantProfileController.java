@@ -24,7 +24,7 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/admin/merchant")
+@RequestMapping("/merchants")
 @CrossOrigin("*")
 public class MerchantProfileController {
 

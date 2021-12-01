@@ -17,6 +17,7 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
+@RequestMapping("/dishes")
 public class DishController {
     @Autowired
     private DishService dishService;

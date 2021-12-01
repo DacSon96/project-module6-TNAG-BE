@@ -19,6 +19,8 @@ public class MerchantProfile {
 
     private String address;
 
+    private String image;
+
     @ManyToMany
     private List<Category> categories;
 

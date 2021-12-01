@@ -13,7 +13,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.codegym.project.users.merchantProfile.MerchantProfile;
 import com.codegym.project.users.merchantProfile.IMerchantProfileService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -22,13 +21,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+
 @RestController
-@RequestMapping("/merchant")
+@RequestMapping("/admin/merchant")
 @CrossOrigin("*")
 public class MerchantProfileController {
-
-    @Autowired
-    private IMerchantProfileService merchantProfileService;
 
     @Autowired
     private IUserService userService;
@@ -39,7 +36,7 @@ public class MerchantProfileController {
     @Autowired
     private IUserStatusService userStatusService;
 
-    @GetMapping("/approval")
+    @GetMapping("/pending")
     public ResponseEntity<Page<User>> getAllMerchantPendingApproval(
             @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
             @RequestParam(name = "size", required = false, defaultValue = "5") Integer size,
@@ -54,9 +51,21 @@ public class MerchantProfileController {
         Pageable pageable = PageRequest.of(page, size, sortable);
         UserStatus status = userStatusService.findByName("pendingApproval");
         Role merchantRole = roleService.findByName("merchant");
-        Page<User> merchantPending = userService.findAllByRolesContainingAndUserStatus(merchantRole,status,pageable);
+        Page<User> merchantPending = userService.findAllByRolesContainingAndUserStatus(merchantRole, status, pageable);
         return new ResponseEntity<>(merchantPending, HttpStatus.OK);
     }
 
+    @PutMapping("/updateStatus/{id}/{statusName}")
+    public ResponseEntity<User> approvalById(@PathVariable Long id, @PathVariable String statusName) {
+        Optional<User> optionalUser = userService.findById(id);
+        UserStatus approvalStatus = userStatusService.findByName(statusName);
+        if (!optionalUser.isPresent() || approvalStatus == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        User user = optionalUser.get();
+        user.setUserStatus(approvalStatus);
+        userService.save(user);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
 
 }

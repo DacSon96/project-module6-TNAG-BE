@@ -24,6 +24,8 @@ public class UserProfile {
 
     private String sex;
 
+    public UserProfile(){}
+
     public UserProfile(String fullName, String phone, String avatar, String sex) {
         this.fullName = fullName;
         this.phone = phone;

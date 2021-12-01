@@ -22,8 +22,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+
 @RestController
-@RequestMapping("/merchant")
+@RequestMapping("/admin/merchant")
 @CrossOrigin("*")
 public class MerchantProfileController {
 
@@ -39,7 +40,7 @@ public class MerchantProfileController {
     @Autowired
     private IUserStatusService userStatusService;
 
-    @GetMapping("/approval")
+    @GetMapping("/pending")
     public ResponseEntity<Page<User>> getAllMerchantPendingApproval(
             @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
             @RequestParam(name = "size", required = false, defaultValue = "5") Integer size,
@@ -58,6 +59,18 @@ public class MerchantProfileController {
         return new ResponseEntity<>(merchantPending, HttpStatus.OK);
     }
 
+    @PutMapping("/updateStatus/{id}/{statusName}")
+    public ResponseEntity<User> approvalById(@PathVariable Long id, @PathVariable String statusName) {
+        Optional<User> optionalUser = userService.findById(id);
+        UserStatus approvalStatus = userStatusService.findByName(statusName);
+        if (!optionalUser.isPresent() || approvalStatus == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        User user = optionalUser.get();
+        user.setUserStatus(approvalStatus);
+        userService.save(user);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
     @GetMapping("/{id}")
     public ResponseEntity<User> getById(@PathVariable Long id) {
         Role role = roleService.findByName("ROLE_MERCHANT");

@@ -36,4 +36,11 @@ public class UserDeliverAddress {
         this.phone = phone;
         this.user = user;
     }
+
+    public UserDeliverAddress(String customerName, String phone, User user, String address) {
+        this.customerName = customerName;
+        this.phone = phone;
+        this.user = user;
+        this.address = address;
+    }
 }

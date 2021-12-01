@@ -63,4 +63,13 @@ public class User {
         this.roles = roles;
         this.userProfile = userProfile;
     }
+
+    public User(String username, String password, String email, List<Role> roles, UserProfile userProfile, UserStatus userStatus) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.roles = roles;
+        this.userProfile = userProfile;
+        this.userStatus = userStatus;
+    }
 }

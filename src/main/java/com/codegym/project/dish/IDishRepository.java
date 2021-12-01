@@ -13,4 +13,5 @@ public interface IDishRepository extends JpaRepository<Dish, Long> {
     Page<Dish> findAllByNameContaining(String name, Pageable pageable);
     Optional<Dish> findByName(String name);
     Page<Dish> findDishByMerchant(User user, Pageable pageable);
+    Page<Dish> findAllByNameContainingAndMerchant(String name, User user, Pageable pageable);
 }

@@ -41,6 +41,7 @@ public class MerchantProfileController {
     @Autowired
     private IUserStatusService userStatusService;
 
+    @Secured("ROLE_ADMIN")
     @GetMapping("/pending")
     public ResponseEntity<Page<User>> getAllMerchantPendingApproval(
             @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
@@ -55,11 +56,12 @@ public class MerchantProfileController {
         }
         Pageable pageable = PageRequest.of(page, size, sortable);
         UserStatus status = userStatusService.findByName("pendingApproval");
-        Role merchantRole = roleService.findByName("merchant");
+        Role merchantRole = roleService.findByName("ROLE_MERCHANT");
         Page<User> merchantPending = userService.findAllByRolesContainingAndUserStatus(merchantRole, status, pageable);
         return new ResponseEntity<>(merchantPending, HttpStatus.OK);
     }
 
+    @Secured("ROLE_ADMIN")
     @PutMapping("/updateStatus/{id}/{statusName}")
     public ResponseEntity<User> approvalById(@PathVariable Long id, @PathVariable String statusName) {
         Optional<User> optionalUser = userService.findById(id);
@@ -72,6 +74,8 @@ public class MerchantProfileController {
         userService.save(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
+
+    @Secured("ROLE_ADMIN")
     @GetMapping("/{id}")
     public ResponseEntity<User> getById(@PathVariable Long id) {
         Role role = roleService.findByName("ROLE_MERCHANT");
@@ -82,6 +86,7 @@ public class MerchantProfileController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_MERCHANT"})
     @PutMapping("/{id}")
     public ResponseEntity<MerchantProfile> update(@PathVariable Long id, @RequestBody MerchantProfile merchantProfile) {
         Optional<MerchantProfile> merchantProfileOptional = merchantProfileService.findById(id);

@@ -1,15 +1,13 @@
 package com.codegym.project.controller;
 
 
+import com.codegym.project.role.IRoleService;
 import com.codegym.project.role.Role;
-import com.codegym.project.users.merchantProfile.MerchantProfile;
-import com.codegym.project.users.merchantProfile.service.IMerchantProfileService;
 import com.codegym.project.users.userAddress.IUserAddressService;
 import com.codegym.project.users.userAddress.UserDeliverAddress;
 import com.codegym.project.users.userForm.UserForm;
 import com.codegym.project.users.userProfile.IUserProfileService;
 import com.codegym.project.users.userProfile.UserProfile;
-import com.codegym.project.users.userStatus.IUserStatusService;
 import com.codegym.project.users.users.IUserService;
 import com.codegym.project.users.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,31 +20,30 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/userForms")
 public class AuthController {
     @Autowired
-    private IUserStatusService userStatusService;
-    @Autowired
     private IUserService userService;
-    @Autowired
-    private IMerchantProfileService merchantProfileService;
     @Autowired
     private IUserProfileService userProfileService;
     @Autowired
     private IUserAddressService userAddressService;
 
+    @Autowired
+    private IRoleService roleService;
+
     @Value("${file-upload}")
     private String fileUpload;
 
-    @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody UserForm userForm) throws IOException {
+    @PostMapping("/register")
+    public ResponseEntity<User> createUser( UserForm userForm) throws IOException {
         MultipartFile multipartFile = userForm.getAvatar();
         String fileName = multipartFile.getOriginalFilename();
-        FileCopyUtils.copy(userForm.getAvatar().getBytes(), new File(fileUpload,fileName));
+        FileCopyUtils.copy(userForm.getAvatar().getBytes(), new File(fileUpload + fileName));
 
         UserProfile userProfile = new UserProfile(
                 userForm.getFullName(),
@@ -54,27 +51,29 @@ public class AuthController {
                 fileName,
                 userForm.getSex()
         );
-        userProfileService.save(userProfile);
-        MerchantProfile merchantProfile =null;
-        List<Role> roles=null;
+        userProfile = userProfileService.save(userProfile);
+        List<Role> roles = new ArrayList<>();
+        Role role = roleService.findByName("ROLE_USER");
+        roles.add(role);
+
         User user = new User(
                 userForm.getName(),
                 userForm.getPassword(),
                 userForm.getEmail(),
                 roles,
-                userProfile,
-                merchantProfile,
+                userProfile
         );
 
+        user = userService.save(user);
 
         UserDeliverAddress userDeliverAddress = new UserDeliverAddress(
                 userForm.getName(),
                 userForm.getPhone(),
                 user
         );
+        userAddressService.save(userDeliverAddress);
 
 
-        return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
-
 }

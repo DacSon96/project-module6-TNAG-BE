@@ -15,7 +15,6 @@ public class UserForm {
     private Long id;
     private String name;
     private String email;
-    private Long role;
     private String password;
     private String fullName;
     private String phone;

@@ -55,4 +55,12 @@ public class User {
         this.merchantProfile = merchantProfile;
         this.userStatus = userStatus;
     }
+
+    public User(String username, String password, String email, List<Role> roles, UserProfile userProfile) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.roles = roles;
+        this.userProfile = userProfile;
+    }
 }

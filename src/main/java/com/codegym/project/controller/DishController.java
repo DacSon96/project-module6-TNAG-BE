@@ -37,6 +37,10 @@ public class DishController {
     @Autowired
     private IRoleService roleService;
 
+
+    @Value("${file-upload}")
+    private String fileUpload;
+
     @GetMapping("/merchant/{id}")
     public ResponseEntity<Page<Dish>> findAllDishesByMechant(@RequestParam(name = "q")Optional<String> q,
                                                                  @PathVariable("id") Long id, Pageable pageable) {
@@ -66,8 +70,6 @@ public class DishController {
         return new ResponseEntity<>(dishPage, HttpStatus.OK);
     }
 
-    @Value("${file-upload}")
-    private String fileUpload;
 
     @GetMapping("/{id}")
     public ResponseEntity<Dish> findById(@PathVariable Long id) {

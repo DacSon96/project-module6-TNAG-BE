@@ -1,4 +1,4 @@
-package com.codegym.project.controller.dishcontroller;
+package com.codegym.project.controller;
 
 import com.codegym.project.food.Dish;
 import com.codegym.project.food.DishService;

@@ -1,6 +1,6 @@
 package com.codegym.project.orders.orderDetail;
 
-import com.codegym.project.food.Dish;
+import com.codegym.project.dish.Dish;
 import lombok.Data;
 
 import javax.persistence.*;

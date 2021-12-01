@@ -1,4 +1,4 @@
-package com.codegym.project.food;
+package com.codegym.project.dish;
 
 import com.codegym.project.IGeneralService;
 import com.codegym.project.users.users.User;

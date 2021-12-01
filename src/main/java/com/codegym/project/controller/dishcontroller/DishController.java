@@ -1,7 +1,7 @@
 package com.codegym.project.controller.dishcontroller;
 
-import com.codegym.project.food.Dish;
-import com.codegym.project.food.DishService;
+import com.codegym.project.dish.Dish;
+import com.codegym.project.dish.DishService;
 import com.codegym.project.role.IRoleService;
 import com.codegym.project.role.Role;
 import com.codegym.project.users.users.User;

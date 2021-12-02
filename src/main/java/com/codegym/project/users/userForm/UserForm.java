@@ -5,7 +5,6 @@ import com.codegym.project.users.userStatus.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,7 +17,7 @@ public class UserForm {
     private String password;
     private String fullName;
     private String phone;
-    private MultipartFile avatar;
+    private String address;
     private String sex;
 
 

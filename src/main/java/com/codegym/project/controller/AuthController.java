@@ -8,6 +8,9 @@ import com.codegym.project.users.userAddress.UserDeliverAddress;
 import com.codegym.project.users.userForm.UserForm;
 import com.codegym.project.users.userProfile.IUserProfileService;
 import com.codegym.project.users.userProfile.UserProfile;
+import com.codegym.project.users.userStatus.IUserStatusService;
+import com.codegym.project.users.userStatus.UserStatus;
+import com.codegym.project.users.userStatus.UserStatusConst;
 import com.codegym.project.users.users.IUserService;
 import com.codegym.project.users.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,38 +53,39 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private IUserStatusService userStatusService;
+
     @Value("${file-upload}")
     private String fileUpload;
 
     @PostMapping("/register")
-    public ResponseEntity<User> createUser(UserForm userForm) throws IOException {
-        MultipartFile multipartFile = userForm.getAvatar();
-        String fileName = multipartFile.getOriginalFilename();
-        FileCopyUtils.copy(userForm.getAvatar().getBytes(), new File(fileUpload + fileName));
-
+    public ResponseEntity<User> createUser(@RequestBody UserForm userForm) throws IOException {
         UserProfile userProfile = new UserProfile(
                 userForm.getFullName(),
                 userForm.getPhone(),
-                fileName,
                 userForm.getSex()
         );
         userProfile = userProfileService.save(userProfile);
         List<Role> roles = new ArrayList<>();
         Role role = roleService.findByName("ROLE_USER");
+        UserStatus userStatus = userStatusService.findByName(UserStatusConst.AVAILABLE);
         roles.add(role);
         User user = new User(
                 userForm.getName(),
                 userForm.getPassword(),
                 userForm.getEmail(),
                 roles,
-                userProfile
+                userProfile,
+                userStatus
         );
         user = userService.save(user);
 
         UserDeliverAddress userDeliverAddress = new UserDeliverAddress(
                 userForm.getName(),
                 userForm.getPhone(),
-                user
+                user,
+                userForm.getAddress()
         );
         userAddressService.save(userDeliverAddress);
 

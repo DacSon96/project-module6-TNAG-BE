@@ -6,6 +6,7 @@ import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -16,8 +17,8 @@ public class MerchantProfile {
 
     private String address;
 
-    @ManyToMany
-    private List<Category> categories;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Category> categories;
 
     @Column(nullable = false)
     @Size(min = 10, max = 11)

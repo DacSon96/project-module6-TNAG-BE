@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -71,6 +72,7 @@ public class MerchantProfileController {
         userService.save(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<User> getById(@PathVariable Long id) {
         Role role = roleService.findByName("ROLE_MERCHANT");
@@ -82,6 +84,7 @@ public class MerchantProfileController {
     }
 
     @PutMapping("/{id}")
+    @Secured({"ROLE_ADMIN", "ROLE_MERCHANT"})
     public ResponseEntity<MerchantProfile> update(@PathVariable Long id, @RequestBody MerchantProfile merchantProfile) {
         Optional<MerchantProfile> merchantProfileOptional = merchantProfileService.findById(id);
         if (!merchantProfileOptional.isPresent()) {
@@ -91,6 +94,4 @@ public class MerchantProfileController {
         merchantProfileService.save(merchantProfile);
         return new ResponseEntity<>(merchantProfile, HttpStatus.OK);
     }
-
-
 }

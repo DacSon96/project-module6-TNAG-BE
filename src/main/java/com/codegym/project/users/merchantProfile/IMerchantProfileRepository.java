@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IMerchantProfileRepository extends JpaRepository<MerchantProfile,Long> {
     Page<MerchantProfile> findAll(Pageable pageable);
+
 }

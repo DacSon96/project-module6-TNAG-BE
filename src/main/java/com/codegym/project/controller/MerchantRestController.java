@@ -49,13 +49,15 @@ public class MerchantRestController {
         return new ResponseEntity<>(userPage, HttpStatus.OK);
     }
 
-    @Secured({RoleConst.ADMIN, RoleConst.USER})
+//    @Secured({RoleConst.ADMIN, RoleConst.USER})
     @PostMapping("/{id}")
     public ResponseEntity<User> registerMerchant(@RequestBody MerchantProfile merchantProfile, @PathVariable("id") Long id){
         Optional<User> optionalUser = userService.findById(id);
         if (!optionalUser.isPresent()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
+            String newHotline = "0" + merchantProfile.getHotline();
+            merchantProfile.setHotline(newHotline);
             UserStatus userStatus = userStatusService.findByName(UserStatusConst.PENDING);
             Role role = roleService.findByName(RoleConst.MERCHANT);
             User user = optionalUser.get();

@@ -15,8 +15,11 @@ public class MerchantProfile {
     private Long id;
 
     @Column(nullable = false)
+    @Size(min = 10, max = 100)
     private String name;
 
+    @Column(nullable = false)
+    @Size(min = 10, max = 100)
     private String address;
 
     private String image;
@@ -30,5 +33,9 @@ public class MerchantProfile {
 
     @Column(nullable = false)
     private String openHours;
+
+    @Column(nullable = false)
+    @Size(min = 50)
+    private String description;
 
 }

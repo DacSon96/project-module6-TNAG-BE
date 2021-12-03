@@ -1,13 +1,16 @@
 package com.codegym.project.orders.order;
 
 import com.codegym.project.orders.coupon.Coupon;
+import com.codegym.project.orders.orderDetail.OrdersDetail;
 import com.codegym.project.orders.orderStatus.OrderStatus;
 import com.codegym.project.orders.payment.PaymentMethod;
+import com.codegym.project.users.userAddress.UserDeliverAddress;
 import com.codegym.project.users.users.User;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Data
@@ -22,8 +25,8 @@ public class Orders {
     @Column(nullable = false)
     private Date orderTime;
 
-    @Column(nullable = false)
-    private String address;
+    @ManyToOne
+    private UserDeliverAddress address;
 
     @Column(nullable = false)
     private double totalPayment;
@@ -39,5 +42,8 @@ public class Orders {
 
     @ManyToOne
     private PaymentMethod paymentMethod;
+
+    @ManyToMany
+    private Set<OrdersDetail> ordersDetails;
 
 }

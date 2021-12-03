@@ -62,7 +62,7 @@ public class MerchantProfileController {
     }
 
     @Secured("ROLE_ADMIN")
-    @PutMapping("/updateStatus/{id}/{statusName}")
+    @GetMapping("/updateStatus/{id}/{statusName}")
     public ResponseEntity<User> approvalById(@PathVariable Long id, @PathVariable String statusName) {
         Optional<User> optionalUser = userService.findById(id);
         UserStatus approvalStatus = userStatusService.findByName(statusName);

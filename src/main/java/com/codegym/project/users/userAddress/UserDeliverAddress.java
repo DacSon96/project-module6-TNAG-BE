@@ -10,19 +10,15 @@ import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class UserDeliverAddress {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    @NotEmpty
     private String customerName;
 
     @Column(nullable = false)
-    @NotEmpty
     private String phone;
 
     @ManyToOne
@@ -30,6 +26,9 @@ public class UserDeliverAddress {
 
     @Column(nullable = false)
     private String address;
+
+    public UserDeliverAddress() {
+    }
 
     public UserDeliverAddress(String customerName, String phone, User user) {
         this.customerName = customerName;

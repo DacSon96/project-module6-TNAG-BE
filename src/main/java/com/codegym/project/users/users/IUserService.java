@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import com.codegym.project.users.userStatus.UserStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
@@ -21,4 +22,6 @@ public interface IUserService extends IGeneralService<User>, UserDetailsService 
     Page<User> findAllByRolesContainingAndUserStatus(Role role, UserStatus status,Pageable pageable);
 
     boolean isUserDuplicated(String username);
+
+    User getUserFromAuthentication(Authentication authentication);
 }

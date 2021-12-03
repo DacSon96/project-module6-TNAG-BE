@@ -43,6 +43,9 @@ public class MerchantRestController {
         Role role = roleService.findByName(RoleConst.MERCHANT);
         Page<User> userPage;
         userPage = userService.findAllByRolesContaining(role, pageable);
+        if(userPage.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         return new ResponseEntity<>(userPage, HttpStatus.OK);
     }
 

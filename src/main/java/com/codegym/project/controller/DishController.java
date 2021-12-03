@@ -42,7 +42,7 @@ public class DishController {
     @Value("${file-upload}")
     private String fileUpload;
 
-    @GetMapping("/merchant/{id}")
+    @GetMapping("/{id}/merchant")
     public ResponseEntity<Page<Dish>> findAllDishesByMechant(@RequestParam(name = "q")Optional<String> q,
                                                                  @PathVariable("id") Long id, Pageable pageable) {
         Role role = roleService.findByName(RoleConst.MERCHANT);

@@ -97,4 +97,8 @@ public class DishController {
         );
         return new ResponseEntity<>(dishService.save(dish), HttpStatus.CREATED);
     }
+    @GetMapping("/find")
+    public ResponseEntity<Page<Dish>> findfullName(@RequestParam(name = "name",required = false) String name,Pageable pageable){
+        return ResponseEntity.ok(dishService.findByfullname(name,pageable));
+    }
 }

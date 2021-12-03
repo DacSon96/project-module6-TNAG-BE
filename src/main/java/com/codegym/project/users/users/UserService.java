@@ -46,6 +46,11 @@ public class UserService implements IUserService {
         }
     }
 
+    @Override
+    public Page<User> findAllByRolesAndMerchantProfileNameContaining(Role role, String name, Pageable pageable) {
+        return userRepository.findAllByRolesAndMerchantProfileNameContaining(role, name, pageable);
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

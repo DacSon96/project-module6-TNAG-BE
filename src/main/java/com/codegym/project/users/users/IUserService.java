@@ -21,4 +21,6 @@ public interface IUserService extends IGeneralService<User>, UserDetailsService 
     Page<User> findAllByRolesContainingAndUserStatus(Role role, UserStatus status,Pageable pageable);
 
     boolean isUserDuplicated(String username);
+
+    Page<User> findAllByRolesAndMerchantProfileNameContaining(Role role, String name, Pageable pageable);
 }

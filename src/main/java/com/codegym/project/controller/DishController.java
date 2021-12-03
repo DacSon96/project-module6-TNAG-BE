@@ -55,6 +55,8 @@ public class DishController {
         }else {
             Page<Dish> dishPage= dishService.findAllByNameContainingAndMerchant(q.get(),user,pageable);
             return new ResponseEntity<>(dishPage,HttpStatus.OK);
+//            Page<Dish> dishPage= dishService.findDishByNameContainingAndIdAndMerchant(q.get(),user,pageable,id);
+//            return new ResponseEntity<>(dishPage,HttpStatus.OK);
         }
 
     }

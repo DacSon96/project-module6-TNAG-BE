@@ -55,13 +55,13 @@ public class MerchantProfileController {
             sortable = Sort.by("id").descending();
         }
         Pageable pageable = PageRequest.of(page, size, sortable);
-        UserStatus status = userStatusService.findByName("approved");
+        UserStatus status = userStatusService.findByName("pendingApproval");
         Role merchantRole = roleService.findByName("ROLE_MERCHANT");
         Page<User> merchantPending = userService.findAllByRolesContainingAndUserStatus(merchantRole, status, pageable);
         return new ResponseEntity<>(merchantPending, HttpStatus.OK);
     }
 
-//    @Secured("ROLE_ADMIN")
+    @Secured("ROLE_ADMIN")
     @GetMapping("/updateStatus/{id}/{statusName}")
     public ResponseEntity<User> approvalById(@PathVariable("id") Long id, @PathVariable("statusName") String statusName) {
         Optional<User> optionalUser = userService.findById(id);
@@ -98,6 +98,24 @@ public class MerchantProfileController {
         return new ResponseEntity<>(merchantProfile, HttpStatus.OK);
     }
 
+    @GetMapping("/search/{searchValue}")
+    public ResponseEntity<Page<User>> searchMerchantByName(
+            @PathVariable String searchValue,
+            @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+            @RequestParam(name = "size", required = false, defaultValue = "5") Integer size,
+            @RequestParam(name = "sort", required = false, defaultValue = "ASC") String sort) {
+        Sort sortable = null;
+        if (sort.equals("ASC")) {
+            sortable = Sort.by("id").ascending();
+        }
+        if (sort.equals("DESC")) {
+            sortable = Sort.by("id").descending();
+        }
+        Pageable pageable = PageRequest.of(page, size, sortable);
+        Role role = roleService.findByName("ROLE_MERCHANT");
+        Page<User> merchantPage = userService.findAllByRolesAndMerchantProfileNameContaining(role, searchValue, pageable);
+        return new ResponseEntity<>(merchantPage, HttpStatus.OK);
+    }
 
 
 }

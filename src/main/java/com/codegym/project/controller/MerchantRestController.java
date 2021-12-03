@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,7 @@ public class MerchantRestController {
     @Autowired
     private IRoleService roleService;
 
+    @Secured("ROLE_ADMIN")
     @GetMapping
     public ResponseEntity<Page<User>> findAllByRoleMerchants(@PageableDefault(sort = "username", size = 5) Pageable pageable) {
         Role role = roleService.findByName("ROLE_MERCHANT");
@@ -32,4 +34,5 @@ public class MerchantRestController {
         userPage = userService.findAllByRolesContaining(role, pageable);
         return new ResponseEntity<>(userPage, HttpStatus.OK);
     }
+
 }

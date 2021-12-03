@@ -75,7 +75,6 @@ public class MerchantProfileController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @Secured("ROLE_ADMIN")
     @GetMapping("/{id}")
     public ResponseEntity<User> getById(@PathVariable Long id) {
         Role role = roleService.findByName("ROLE_MERCHANT");

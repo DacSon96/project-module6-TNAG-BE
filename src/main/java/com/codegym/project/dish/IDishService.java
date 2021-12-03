@@ -12,4 +12,5 @@ public interface IDishService extends IGeneralService<Dish> {
     Optional<Dish> findByName(String name);
     Page<Dish> findDishByMerchant(User user, Pageable pageable);
     Page<Dish> findAllByNameContainingAndMerchant(String name, User user, Pageable pageable);
+    Page<Dish> findDishByNameContainingAndIdAndMerchant(String name, User user, Pageable pageable, Long id);
 }

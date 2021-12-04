@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.codegym.project.security.JwtService;
 import com.codegym.project.security.model.JwtResponse;
@@ -111,5 +112,13 @@ public class AuthController {
         } else {
             return new ResponseEntity<>(user, HttpStatus.OK);
         }
+    }
+    @GetMapping("/user/{id}")
+    public ResponseEntity<Optional<User>> getUserById(@PathVariable Long id) {
+        Optional<User> currentUser = userService.findById(id);
+        if (!currentUser.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(currentUser, HttpStatus.OK);
     }
 }

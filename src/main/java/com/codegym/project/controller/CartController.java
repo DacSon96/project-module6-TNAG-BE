@@ -24,6 +24,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/carts")
 public class CartController {
     @Autowired
@@ -57,7 +58,7 @@ public class CartController {
 
     }
 
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @Secured("ROLE_USER")
     @PostMapping("/{dishId}/{direction}")
     public ResponseEntity<CartDetail> addToCart(Authentication authentication,
                                                 @PathVariable("dishId") Long id,

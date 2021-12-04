@@ -12,9 +12,8 @@ public class OrdersForm {
     private Long id;
     private UserDeliverAddress address;
     private Coupon coupon;
-    private User shipper;
     private PaymentMethod paymentMethod;
-
+    private String note;
     public OrdersForm() {
     }
 }

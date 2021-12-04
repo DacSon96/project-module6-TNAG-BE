@@ -5,6 +5,7 @@ import com.codegym.project.dish.DishService;
 import com.codegym.project.role.IRoleService;
 import com.codegym.project.role.Role;
 import com.codegym.project.role.RoleConst;
+import com.codegym.project.security.model.UserPrinciple;
 import com.codegym.project.users.users.User;
 import com.codegym.project.users.users.UserService;
 import com.codegym.project.dish.DishForm;
@@ -16,6 +17,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
@@ -38,13 +40,12 @@ public class DishController {
     @Autowired
     private IRoleService roleService;
 
-
     @Value("${file-upload}")
     private String fileUpload;
 
     @GetMapping("/{id}/merchant")
-    public ResponseEntity<Page<Dish>> findAllDishesByMechant(@RequestParam(name = "q") Optional<String> q,
-                                                             @PathVariable("id") Long id, Pageable pageable) {
+    public ResponseEntity<Page<Dish>> findAllDishesByMerchant(@RequestParam(name = "q") Optional<String> q,
+                                                              @PathVariable("id") Long id, Pageable pageable) {
         Role role = roleService.findByName(RoleConst.MERCHANT);
         User user = userService.findByRolesContainingAndId(role, id);
         if (user == null) {

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.persistence.Column;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -15,8 +16,6 @@ import javax.validation.constraints.Size;
 public class DishForm {
     private Long id;
 
-    private double price;
-
     @Size(min = 4, max = 200)
     private String name;
 
@@ -26,7 +25,11 @@ public class DishForm {
     @Size(max = 255)
     private String description;
 
+    @Column(nullable = false)
+    private Double price;
+
     private User merchant;
 
     private Boolean status;
+
 }

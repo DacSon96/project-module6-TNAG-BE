@@ -2,6 +2,7 @@ package com.codegym.project.orders.order;
 
 import com.codegym.project.cart.cart.Cart;
 import com.codegym.project.cart.cartDetail.CartDetail;
+import com.codegym.project.cart.cartDetail.ICartDetailService;
 import com.codegym.project.orders.orderDetail.OrdersDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,9 @@ import java.util.Set;
 public class OrdersService implements IOrdersService{
     @Autowired
     private IOrdersRepository ordersRepository;
+
+    @Autowired
+    private ICartDetailService cartDetailService;
 
     @Override
     public Page<Orders> findAll(Pageable pageable) {
@@ -48,6 +52,7 @@ public class OrdersService implements IOrdersService{
                     c.getQuantity()
             );
             ordersDetails.add(ordersDetail);
+            cartDetailService.deleteById(c.getId());
         }
         return ordersDetails;
     }

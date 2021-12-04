@@ -15,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -81,8 +83,10 @@ public class DishController {
         return new ResponseEntity<>(food.get(), HttpStatus.OK);
     }
 
+    @Secured("ROLE_MERCHANT")
     @PostMapping
-    public ResponseEntity<Dish> createDish(DishForm dishForm) throws IOException {
+    public ResponseEntity<Dish> createDish(DishForm dishForm, Authentication authentication) throws IOException {
+        User user = userService.getUserFromAuthentication(authentication);
         MultipartFile multipartFile = dishForm.getImage();
         String fileName = multipartFile.getOriginalFilename();
         FileCopyUtils.copy(dishForm.getImage().getBytes(), new File(fileUpload, fileName));
@@ -91,9 +95,20 @@ public class DishController {
                 dishForm.getName(),
                 fileName,
                 dishForm.getDescription(),
-                dishForm.getMerchant(),
-                dishForm.getStatus()
+                user,
+                true
         );
         return new ResponseEntity<>(dishService.save(dish), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+        Optional<Dish> optionalDish = dishService.findById(id);
+        if (!optionalDish.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            dishService.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
     }
 }

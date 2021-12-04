@@ -19,7 +19,6 @@ public class Dish {
     private Long id;
 
     @Column(nullable = false)
-    @Size(min = 1)
     private double price;
 
     @Column(nullable = false)

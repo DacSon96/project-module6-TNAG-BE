@@ -62,8 +62,8 @@ public class MerchantProfileController {
     }
 
     @Secured("ROLE_ADMIN")
-    @GetMapping("/updateStatus/{id}/{statusName}")
-    public ResponseEntity<User> approvalById(@PathVariable("id") Long id, @PathVariable("statusName") String statusName) {
+    @PutMapping("/updateStatus/{id}/{statusName}")
+    public ResponseEntity<User> approvalById(@PathVariable Long id, @PathVariable String statusName) {
         Optional<User> optionalUser = userService.findById(id);
         UserStatus approvalStatus = userStatusService.findByName(statusName);
         if (!optionalUser.isPresent() || approvalStatus == null) {
@@ -75,6 +75,7 @@ public class MerchantProfileController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    @Secured({"ROLE_ADMIN","ROLE_MERCHANT"})
     @GetMapping("/{id}")
     public ResponseEntity<User> getById(@PathVariable Long id) {
         Role role = roleService.findByName("ROLE_MERCHANT");

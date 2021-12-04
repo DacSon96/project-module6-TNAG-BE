@@ -1,5 +1,6 @@
 package com.codegym.project.users.userAddress;
 
+import com.codegym.project.users.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,5 +30,10 @@ public class UserAddressService implements IUserAddressService{
     @Override
     public void deleteById(Long id) {
     userAddressRepository.deleteById(id);
+    }
+
+    @Override
+    public Iterable<UserDeliverAddress> findAllByUser(User user) {
+        return userAddressRepository.findAllByUser(user);
     }
 }

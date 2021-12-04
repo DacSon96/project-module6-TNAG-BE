@@ -7,8 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @Data
-public class
-OrderDetail {
+public class OrdersDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,19 +18,25 @@ OrderDetail {
     @Column(nullable = false)
     private double price;
 
-    @Column(columnDefinition = "1")
     private int quantity;
 
     private double total;
 
-    public OrderDetail() {
+    public OrdersDetail() {
     }
 
-    public OrderDetail(Long id, Dish dish, double price, int quantity) {
+    public OrdersDetail(Long id, Dish dish, double price, int quantity) {
         this.id = id;
         this.dish = dish;
         this.price = price;
         this.quantity = quantity;
-        this.total = price*quantity;
+        this.total = price * quantity;
+    }
+
+    public OrdersDetail(Dish dish, double price, int quantity) {
+        this.dish = dish;
+        this.price = price;
+        this.quantity = quantity;
+        this.total = quantity * price;
     }
 }

@@ -6,6 +6,7 @@ import com.codegym.project.users.userStatus.UserStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,14 @@ public class UserService implements IUserService {
         } else {
             return true;
         }
+    }
+
+    @Override
+    public User getUserFromAuthentication(Authentication authentication) {
+        UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
+        String username = userPrinciple.getUsername();
+        User user = userRepository.findByUsername(username);
+        return user;
     }
 
     @Override

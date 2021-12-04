@@ -16,11 +16,16 @@ public class CartDetail {
     @ManyToOne
     private Dish dish;
 
-    @ManyToOne
-    private Cart cart;
-
     private int quantity;
 
     private double price;
 
+    public CartDetail() {
+    }
+
+    public CartDetail(Dish dish,  int quantity, double price) {
+        this.dish = dish;
+        this.quantity = quantity;
+        this.price = price;
+    }
 }

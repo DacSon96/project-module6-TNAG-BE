@@ -15,6 +15,8 @@ import javax.validation.constraints.Size;
 public class DishForm {
     private Long id;
 
+    private double price;
+
     @Size(min = 4, max = 200)
     private String name;
 

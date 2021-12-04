@@ -63,7 +63,7 @@ public class MerchantProfileController {
 
     @Secured("ROLE_ADMIN")
     @GetMapping("/updateStatus/{id}/{statusName}")
-    public ResponseEntity<User> approvalById(@PathVariable Long id, @PathVariable String statusName) {
+    public ResponseEntity<User> approvalById(@PathVariable("id") Long id, @PathVariable("statusName") String statusName) {
         Optional<User> optionalUser = userService.findById(id);
         UserStatus approvalStatus = userStatusService.findByName(statusName);
         if (!optionalUser.isPresent() || approvalStatus == null) {
@@ -95,6 +95,25 @@ public class MerchantProfileController {
         merchantProfile.setId(id);
         merchantProfileService.save(merchantProfile);
         return new ResponseEntity<>(merchantProfile, HttpStatus.OK);
+    }
+
+    @GetMapping("/search/{searchValue}")
+    public ResponseEntity<Page<User>> searchMerchantByName(
+            @PathVariable String searchValue,
+            @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+            @RequestParam(name = "size", required = false, defaultValue = "5") Integer size,
+            @RequestParam(name = "sort", required = false, defaultValue = "ASC") String sort) {
+        Sort sortable = null;
+        if (sort.equals("ASC")) {
+            sortable = Sort.by("id").ascending();
+        }
+        if (sort.equals("DESC")) {
+            sortable = Sort.by("id").descending();
+        }
+        Pageable pageable = PageRequest.of(page, size, sortable);
+        Role role = roleService.findByName("ROLE_MERCHANT");
+        Page<User> merchantPage = userService.findAllByRolesAndMerchantProfileNameContaining(role, searchValue, pageable);
+        return new ResponseEntity<>(merchantPage, HttpStatus.OK);
     }
 
 

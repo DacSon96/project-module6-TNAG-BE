@@ -19,4 +19,6 @@ public interface IUserRepository extends JpaRepository<User, Long> {
     User findByRolesContainingAndId(Role role, Long id);
 
     Page<User> findAllByRolesContainingAndUserStatus(Role role, UserStatus status,Pageable pageable);
+
+    Page<User> findAllByRolesAndMerchantProfileNameContaining(Role role, String name, Pageable pageable);
 }

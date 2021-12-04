@@ -31,4 +31,5 @@ public class DishForm {
     private User merchant;
 
     private Boolean status;
+
 }

@@ -13,17 +13,17 @@ public class OrderDetailService implements IOrderDetailService{
     private IOrderDetailRepository orderDetailRepository;
 
     @Override
-    public Page<OrderDetail> findAll(Pageable pageable) {
+    public Page<OrdersDetail> findAll(Pageable pageable) {
         return orderDetailRepository.findAll(pageable);
     }
 
     @Override
-    public Optional<OrderDetail> findById(Long id) {
+    public Optional<OrdersDetail> findById(Long id) {
         return orderDetailRepository.findById(id);
     }
 
     @Override
-    public OrderDetail save(OrderDetail orderDetail) {
+    public OrdersDetail save(OrdersDetail orderDetail) {
         return orderDetailRepository.save(orderDetail);
     }
 

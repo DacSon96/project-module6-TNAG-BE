@@ -49,17 +49,17 @@ public class MerchantRestController {
         Role role = roleService.findByName(RoleConst.MERCHANT);
         Page<User> userPage;
         userPage = userService.findAllByRolesContaining(role, pageable);
-        if(userPage.isEmpty()){
+        if (userPage.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(userPage, HttpStatus.OK);
     }
 
-//    @Secured({RoleConst.ADMIN, RoleConst.USER})
-    @PostMapping("/{id}")
-    public ResponseEntity<User> registerMerchant(@RequestBody MerchantProfile merchantProfile, @PathVariable("id") Long id){
+    //    @Secured({RoleConst.ADMIN, RoleConst.USER})
+    @PostMapping("/{id}/register")
+    public ResponseEntity<User> registerMerchant(@RequestBody MerchantProfile merchantProfile, @PathVariable("id") Long id) {
         Optional<User> optionalUser = userService.findById(id);
-        if (!optionalUser.isPresent()){
+        if (!optionalUser.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
             String newHotline = "0" + merchantProfile.getHotline();

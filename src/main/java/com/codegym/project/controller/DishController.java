@@ -8,9 +8,7 @@ import com.codegym.project.role.RoleConst;
 import com.codegym.project.security.model.UserPrinciple;
 import com.codegym.project.users.users.User;
 import com.codegym.project.users.users.UserService;
-import com.codegym.project.dish.Dish;
 import com.codegym.project.dish.DishForm;
-import com.codegym.project.dish.IDishService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -90,13 +88,13 @@ public class DishController {
         String fileName = multipartFile.getOriginalFilename();
         FileCopyUtils.copy(dishForm.getImage().getBytes(), new File(fileUpload + fileName));
         Dish dish = new Dish(
-                dishForm.getName(),
+                dishForm.getPrice(),
                 fileName,
+                dishForm.getName(),
                 dishForm.getDescription(),
                 user,
                 true
         );
-        dish.setPrice(dishForm.getPrice());
         return new ResponseEntity<>(dishService.save(dish), HttpStatus.CREATED);
     }
 }

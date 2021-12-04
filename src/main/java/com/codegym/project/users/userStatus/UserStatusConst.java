@@ -4,5 +4,4 @@ public interface UserStatusConst {
     String PENDING = "PENDING";
     String AVAILABLE = "AVAILABLE";
     String BLOCKED = "BLOCKED";
-
 }

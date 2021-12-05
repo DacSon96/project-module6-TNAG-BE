@@ -62,8 +62,6 @@ public class UserController {
         User user = userService.getUserFromAuthentication(authentication);
         userProfile.setAvatar(user.getUserProfile().getAvatar());
         userProfile.setId(user.getUserProfile().getId());
-        user.setUserProfile(userProfile);
-        userService.save(user);
         userProfileService.save(userProfile);
         return new ResponseEntity<>(userProfile, HttpStatus.OK);
     }

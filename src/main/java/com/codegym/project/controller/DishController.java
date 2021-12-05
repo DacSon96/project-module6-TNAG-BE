@@ -16,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
@@ -54,6 +56,8 @@ public class DishController {
         } else {
             Page<Dish> dishPage = dishService.findAllByNameContainingAndMerchant(q.get(), user, pageable);
             return new ResponseEntity<>(dishPage, HttpStatus.OK);
+//            Page<Dish> dishPage= dishService.findDishByNameContainingAndIdAndMerchant(q.get(),user,pageable,id);
+//            return new ResponseEntity<>(dishPage,HttpStatus.OK);
         }
 
     }
@@ -80,21 +84,32 @@ public class DishController {
         return new ResponseEntity<>(food.get(), HttpStatus.OK);
     }
 
+    @Secured("ROLE_MERCHANT")
     @PostMapping
     public ResponseEntity<Dish> createDish(DishForm dishForm, Authentication authentication) throws IOException {
-        UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
-        User user = userService.findByUsername(userPrinciple.getUsername());
+        User user = userService.getUserFromAuthentication(authentication);
         MultipartFile multipartFile = dishForm.getImage();
         String fileName = multipartFile.getOriginalFilename();
-        FileCopyUtils.copy(dishForm.getImage().getBytes(), new File(fileUpload + fileName));
+        FileCopyUtils.copy(dishForm.getImage().getBytes(), new File(fileUpload, fileName));
         Dish dish = new Dish(
                 dishForm.getPrice(),
-                fileName,
                 dishForm.getName(),
+                fileName,
                 dishForm.getDescription(),
                 user,
                 true
         );
         return new ResponseEntity<>(dishService.save(dish), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+        Optional<Dish> optionalDish = dishService.findById(id);
+        if (!optionalDish.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            dishService.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
     }
 }

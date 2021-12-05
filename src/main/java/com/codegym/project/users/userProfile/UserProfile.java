@@ -17,7 +17,7 @@ public class UserProfile {
     private String fullName;
 
     @Column(nullable = false, unique = true)
-    @Size(min = 10, max = 11)
+    @Size(min = 9, max = 11)
     private String phone;
 
     private String avatar;

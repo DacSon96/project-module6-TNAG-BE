@@ -17,6 +17,10 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,27 +42,28 @@ public class MerchantRestController {
     @Autowired
     private IUserStatusService userStatusService;
 
+    @Secured("ROLE_ADMIN")
     @GetMapping
     public ResponseEntity<Page<User>> findAllByRoleMerchants(@PageableDefault(sort = "username", size = 5) Pageable pageable) {
         Role role = roleService.findByName(RoleConst.MERCHANT);
         Page<User> userPage;
         userPage = userService.findAllByRolesContaining(role, pageable);
-        if(userPage.isEmpty()){
+        if (userPage.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(userPage, HttpStatus.OK);
     }
 
-//    @Secured({RoleConst.ADMIN, RoleConst.USER})
-    @PostMapping("/{id}")
-    public ResponseEntity<User> registerMerchant(@RequestBody MerchantProfile merchantProfile, @PathVariable("id") Long id){
+    //    @Secured({RoleConst.ADMIN, RoleConst.USER})
+    @PostMapping("/{id}/register")
+    public ResponseEntity<User> registerMerchant(@RequestBody MerchantProfile merchantProfile, @PathVariable("id") Long id) {
         Optional<User> optionalUser = userService.findById(id);
-        if (!optionalUser.isPresent()){
+        if (!optionalUser.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
             String newHotline = "0" + merchantProfile.getHotline();
             merchantProfile.setHotline(newHotline);
-            UserStatus userStatus = userStatusService.findByName(UserStatusConst.PENDING);
+            UserStatus userStatus = userStatusService.findByName(UserStatusConst.pending);
             Role role = roleService.findByName(RoleConst.MERCHANT);
             User user = optionalUser.get();
             List<Role> roleList = user.getRoles();

@@ -31,4 +31,9 @@ public class OrderStatusService implements IOrderStatusService{
     public void deleteById(Long id) {
         orderStatusRepository.deleteById(id);
     }
+
+    @Override
+    public OrderStatus findByName(String name) {
+        return orderStatusRepository.findByName(name);
+    }
 }

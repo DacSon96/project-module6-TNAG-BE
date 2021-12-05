@@ -1,8 +1,7 @@
 package com.codegym.project.users.userStatus;
 
 public interface UserStatusConst {
-    String PENDING = "PENDING";
-    String AVAILABLE = "AVAILABLE";
-    String BLOCKED = "BLOCKED";
-
+    String pending = "Chờ xét duyệt";
+    String approved = "Đang hoạt động";
+    String blocked = "Đang bị khoá";
 }

@@ -5,11 +5,10 @@ import com.codegym.project.dish.DishService;
 import com.codegym.project.role.IRoleService;
 import com.codegym.project.role.Role;
 import com.codegym.project.role.RoleConst;
+import com.codegym.project.security.model.UserPrinciple;
 import com.codegym.project.users.users.User;
 import com.codegym.project.users.users.UserService;
-import com.codegym.project.dish.Dish;
 import com.codegym.project.dish.DishForm;
-import com.codegym.project.dish.IDishService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -17,6 +16,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.Authentication;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,23 +40,23 @@ public class DishController {
     @Autowired
     private IRoleService roleService;
 
-
     @Value("${file-upload}")
     private String fileUpload;
 
     @GetMapping("/{id}/merchant")
+
     public ResponseEntity<Page<Dish>> findAllDishesByMechant(@RequestParam(name = "q")Optional<String> q,
                                                                  @PathVariable("id") Long id, Pageable pageable) {
         Role role = roleService.findByName(RoleConst.MERCHANT);
         User user = userService.findByRolesContainingAndId(role, id);
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } else if( !q.isPresent()) {
+        } else if (!q.isPresent()) {
             Page<Dish> dishPage = dishService.findDishByMerchant(user, pageable);
             return new ResponseEntity<>(dishPage, HttpStatus.OK);
-        }else {
-            Page<Dish> dishPage= dishService.findAllByNameContainingAndMerchant(q.get(),user,pageable);
-            return new ResponseEntity<>(dishPage,HttpStatus.OK);
+        } else {
+            Page<Dish> dishPage = dishService.findAllByNameContainingAndMerchant(q.get(), user, pageable);
+            return new ResponseEntity<>(dishPage, HttpStatus.OK);
 //            Page<Dish> dishPage= dishService.findDishByNameContainingAndIdAndMerchant(q.get(),user,pageable,id);
 //            return new ResponseEntity<>(dishPage,HttpStatus.OK);
         }
@@ -62,13 +64,13 @@ public class DishController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<Dish>> findAll(@RequestParam(name="q") Optional<String> q,
-                                              @PageableDefault(sort = "name",size = 5) Pageable pageable){
+    public ResponseEntity<Page<Dish>> findAll(@RequestParam(name = "q") Optional<String> q,
+                                              @PageableDefault(sort = "name", size = 5) Pageable pageable) {
         Page<Dish> dishPage;
-        if(!q.isPresent()){
-            dishPage=dishService.findAll(pageable);
-        }else {
-            dishPage= dishService.findAllByNameContaining(q.get(),pageable);
+        if (!q.isPresent()) {
+            dishPage = dishService.findAll(pageable);
+        } else {
+            dishPage = dishService.findAllByNameContaining(q.get(), pageable);
         }
         return new ResponseEntity<>(dishPage, HttpStatus.OK);
     }
@@ -83,22 +85,36 @@ public class DishController {
         return new ResponseEntity<>(food.get(), HttpStatus.OK);
     }
 
+    @Secured("ROLE_MERCHANT")
     @PostMapping
-    public ResponseEntity<Dish> createDish(DishForm dishForm) throws IOException {
+    public ResponseEntity<Dish> createDish(DishForm dishForm, Authentication authentication) throws IOException {
+        User user = userService.getUserFromAuthentication(authentication);
         MultipartFile multipartFile = dishForm.getImage();
         String fileName = multipartFile.getOriginalFilename();
         FileCopyUtils.copy(dishForm.getImage().getBytes(), new File(fileUpload, fileName));
         Dish dish = new Dish(
+                dishForm.getPrice(),
                 dishForm.getName(),
                 fileName,
                 dishForm.getDescription(),
-                dishForm.getMerchant(),
-                dishForm.getStatus()
+                user,
+                true
         );
         return new ResponseEntity<>(dishService.save(dish), HttpStatus.CREATED);
     }
     @GetMapping("/find")
-    public ResponseEntity<Page<Dish>> findfullName(@RequestParam(name = "name",required = false) String name,Pageable pageable){
-        return ResponseEntity.ok(dishService.findByfullname(name,pageable));
+    public ResponseEntity<Page<Dish>> findfullName(@RequestParam(name = "name",required = false) String name,Pageable pageable) {
+        return ResponseEntity.ok(dishService.findByfullname(name, pageable));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+        Optional<Dish> optionalDish = dishService.findById(id);
+        if (!optionalDish.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            dishService.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
     }
 }

@@ -19,6 +19,9 @@ public class Dish {
     private Long id;
 
     @Column(nullable = false)
+    private double price;
+
+    @Column(nullable = false)
     @Size(min = 4, max = 200)
     private String name;
 
@@ -34,7 +37,8 @@ public class Dish {
 
     private Boolean status;
 
-    public Dish(String name, String image, String description,User merchant,Boolean status) {
+    public Dish(double price, String name, String image, String description, User merchant, Boolean status) {
+        this.price = price;
         this.name = name;
         this.image = image;
         this.description = description;

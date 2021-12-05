@@ -12,6 +12,8 @@ public class Coupon {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private double discount;
+
     private String code;
 
     private double condition;

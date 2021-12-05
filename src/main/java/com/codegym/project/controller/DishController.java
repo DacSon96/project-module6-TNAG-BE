@@ -44,8 +44,9 @@ public class DishController {
     private String fileUpload;
 
     @GetMapping("/{id}/merchant")
-    public ResponseEntity<Page<Dish>> findAllDishesByMerchant(@RequestParam(name = "q") Optional<String> q,
-                                                              @PathVariable("id") Long id, Pageable pageable) {
+
+    public ResponseEntity<Page<Dish>> findAllDishesByMechant(@RequestParam(name = "q")Optional<String> q,
+                                                                 @PathVariable("id") Long id, Pageable pageable) {
         Role role = roleService.findByName(RoleConst.MERCHANT);
         User user = userService.findByRolesContainingAndId(role, id);
         if (user == null) {
@@ -100,6 +101,10 @@ public class DishController {
                 true
         );
         return new ResponseEntity<>(dishService.save(dish), HttpStatus.CREATED);
+    }
+    @GetMapping("/find")
+    public ResponseEntity<Page<Dish>> findfullName(@RequestParam(name = "name",required = false) String name,Pageable pageable) {
+        return ResponseEntity.ok(dishService.findByfullname(name, pageable));
     }
 
     @DeleteMapping("/{id}")

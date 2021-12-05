@@ -17,11 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +66,7 @@ public class AuthController {
         userProfile = userProfileService.save(userProfile);
         List<Role> roles = new ArrayList<>();
         Role role = roleService.findByName("ROLE_USER");
-        UserStatus userStatus = userStatusService.findByName(UserStatusConst.AVAILABLE);
+        UserStatus userStatus = userStatusService.findByName(UserStatusConst.approved);
         roles.add(role);
         User user = new User(
                 userForm.getName(),
@@ -101,7 +98,7 @@ public class AuthController {
         String jwt = jwtService.generateTokenLogin(authentication);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User currentUser = userService.findByUsername(user.getUsername());
-        return new ResponseEntity<>(new JwtResponse(jwt, currentUser.getId(), userDetails.getUsername(), currentUser.getUsername(), userDetails.getAuthorities()), HttpStatus.OK);
+        return new ResponseEntity<>(new JwtResponse(jwt, currentUser.getId(), userDetails.getUsername(), currentUser.getUserProfile().getFullName(), userDetails.getAuthorities(), currentUser.getEmail(), currentUser.getUserProfile().getPhone(), currentUser.getUserProfile().getAvatar()), HttpStatus.OK);
     }
 
     @PostMapping("/username/check")

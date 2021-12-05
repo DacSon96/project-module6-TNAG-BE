@@ -61,7 +61,7 @@ public class AuthController {
     private String fileUpload;
 
     @PostMapping("/register")
-    public ResponseEntity<User> createUser(@RequestBody UserForm userForm) throws IOException {
+    public ResponseEntity<User> createUser(UserForm userForm) throws IOException {
         UserProfile userProfile = new UserProfile(
                 userForm.getFullName(),
                 userForm.getPhone(),
@@ -85,8 +85,7 @@ public class AuthController {
         UserDeliverAddress userDeliverAddress = new UserDeliverAddress(
                 userForm.getName(),
                 userForm.getPhone(),
-                user,
-                userForm.getAddress()
+                user
         );
         userAddressService.save(userDeliverAddress);
 

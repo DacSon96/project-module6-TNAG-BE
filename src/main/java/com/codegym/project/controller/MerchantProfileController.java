@@ -2,8 +2,10 @@ package com.codegym.project.controller;
 
 import com.codegym.project.role.IRoleService;
 import com.codegym.project.role.Role;
+import com.codegym.project.role.RoleConst;
 import com.codegym.project.users.userStatus.IUserStatusService;
 import com.codegym.project.users.userStatus.UserStatus;
+import com.codegym.project.users.userStatus.UserStatusConst;
 import com.codegym.project.users.users.IUserService;
 import com.codegym.project.users.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,8 +57,8 @@ public class MerchantProfileController {
             sortable = Sort.by("id").descending();
         }
         Pageable pageable = PageRequest.of(page, size, sortable);
-        UserStatus status = userStatusService.findByName("pendingApproval");
-        Role merchantRole = roleService.findByName("ROLE_MERCHANT");
+        UserStatus status = userStatusService.findByName(UserStatusConst.pending);
+        Role merchantRole = roleService.findByName(RoleConst.MERCHANT);
         Page<User> merchantPending = userService.findAllByRolesContainingAndUserStatus(merchantRole, status, pageable);
         return new ResponseEntity<>(merchantPending, HttpStatus.OK);
     }
@@ -65,7 +67,18 @@ public class MerchantProfileController {
     @PutMapping("/updateStatus/{id}/{statusName}")
     public ResponseEntity<User> approvalById(@PathVariable Long id, @PathVariable String statusName) {
         Optional<User> optionalUser = userService.findById(id);
-        UserStatus approvalStatus = userStatusService.findByName(statusName);
+        String status;
+        if (statusName.equals("pending")) {
+            status = UserStatusConst.pending;
+        } else if (statusName.equals("approved")) {
+            status = UserStatusConst.approved;
+        } else if (statusName.equals("blocked")) {
+            status = UserStatusConst.blocked;
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        UserStatus approvalStatus = userStatusService.findByName(status);
+
         if (!optionalUser.isPresent() || approvalStatus == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

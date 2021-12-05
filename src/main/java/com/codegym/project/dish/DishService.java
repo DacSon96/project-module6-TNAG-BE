@@ -57,4 +57,9 @@ public class DishService implements IDishService {
     public Page<Dish> findDishByNameContainingAndIdAndMerchant(String name, User user, Pageable pageable, Long id) {
         return dishRepository.findDishByNameContainingAndIdAndMerchant(name,user,pageable,id);
     }
+
+    @Override
+    public Page<Dish> findByfullname(String name, Pageable pageable) {
+        return dishRepository.findByfullname(name,pageable);
+    }
 }

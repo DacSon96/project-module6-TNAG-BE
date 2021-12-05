@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -64,7 +63,7 @@ public class MerchantRestController {
         } else {
             String newHotline = "0" + merchantProfile.getHotline();
             merchantProfile.setHotline(newHotline);
-            UserStatus userStatus = userStatusService.findByName(UserStatusConst.PENDING);
+            UserStatus userStatus = userStatusService.findByName(UserStatusConst.pending);
             Role role = roleService.findByName(RoleConst.MERCHANT);
             User user = optionalUser.get();
             List<Role> roleList = user.getRoles();

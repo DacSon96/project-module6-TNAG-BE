@@ -1,39 +1,38 @@
 package com.codegym.project.users.merchantProfile;
 
 import com.codegym.project.category.Category;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class MerchantProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    @Size(min = 10, max = 100)
     private String name;
 
-    @Column(nullable = false)
-    @Size(min = 10, max = 100)
     private String address;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Category> categories;
 
-    @Column(nullable = false)
-    @Size(min = 10, max = 11)
     private String hotline;
 
-    @Column(nullable = false)
     private String openHours;
 
-    @Column(nullable = false)
-    @Size(min = 50)
     private String description;
 
+    private String avatar;
+
+    private String cover;
+
+    private String thumbnail;
 }

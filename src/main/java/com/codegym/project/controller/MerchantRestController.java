@@ -92,8 +92,9 @@ public class MerchantRestController {
             MultipartFile multipartFileThumbnail = merchantProfileForm.getThumbnail();
             String filenameThumbnail = multipartFileThumbnail.getOriginalFilename();
             FileCopyUtils.copy(merchantProfileForm.getThumbnail().getBytes(), new File(fileUpload + filenameThumbnail));
+
             MerchantProfile merchantProfile = new MerchantProfile(
-                    merchantProfileForm.getId(),
+                    null,
                     merchantProfileForm.getName(),
                     merchantProfileForm.getAddress(),
                     merchantProfileForm.getCategories(),
@@ -104,8 +105,8 @@ public class MerchantRestController {
                     filenameCover,
                     filenameThumbnail
             );
-            merchantProfileService.save(merchantProfile);
             user.setMerchantProfile(merchantProfile);
+            merchantProfileService.save(merchantProfile);
             return new ResponseEntity<>(user, HttpStatus.CREATED);
         }
     }

@@ -51,7 +51,6 @@ public class MerchantRestController {
     @Value("${file-upload}")
     private String fileUpload;
 
-    @Secured("ROLE_ADMIN")
     @GetMapping
     public ResponseEntity<Page<User>> findAllByRoleMerchants(@PageableDefault(sort = "username", size = 5) Pageable pageable) {
         Role role = roleService.findByName(RoleConst.MERCHANT);
@@ -63,8 +62,7 @@ public class MerchantRestController {
         return new ResponseEntity<>(userPage, HttpStatus.OK);
     }
 
-
-    //    @Secured({RoleConst.ADMIN, RoleConst.USER})
+    @Secured("ROLE_USER")
     @PostMapping("/{id}/register")
     public ResponseEntity<User> registerMerchant(MerchantProfileForm merchantProfileForm, @PathVariable("id") Long id) throws IOException {
         Optional<User> optionalUser = userService.findById(id);

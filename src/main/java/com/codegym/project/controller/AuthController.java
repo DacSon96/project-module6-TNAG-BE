@@ -3,6 +3,7 @@ package com.codegym.project.controller;
 
 import com.codegym.project.role.IRoleService;
 import com.codegym.project.role.Role;
+import com.codegym.project.role.RoleConst;
 import com.codegym.project.users.userAddress.IUserAddressService;
 import com.codegym.project.users.userAddress.UserDeliverAddress;
 import com.codegym.project.users.userForm.UserForm;
@@ -17,11 +18,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.codegym.project.security.JwtService;
 import com.codegym.project.security.model.JwtResponse;
@@ -53,11 +56,14 @@ public class AuthController {
     @Autowired
     private IUserStatusService userStatusService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Value("${file-upload}")
     private String fileUpload;
 
     @PostMapping("/register")
-    public ResponseEntity<User> createUser(@RequestBody UserForm userForm) throws IOException {
+    public ResponseEntity<User> createUser(UserForm userForm) throws IOException {
         UserProfile userProfile = new UserProfile(
                 userForm.getFullName(),
                 userForm.getPhone(),
@@ -65,12 +71,12 @@ public class AuthController {
         );
         userProfile = userProfileService.save(userProfile);
         List<Role> roles = new ArrayList<>();
-        Role role = roleService.findByName("ROLE_USER");
+        Role role = roleService.findByName(RoleConst.USER);
         UserStatus userStatus = userStatusService.findByName(UserStatusConst.approved);
         roles.add(role);
         User user = new User(
                 userForm.getName(),
-                userForm.getPassword(),
+                passwordEncoder.encode(userForm.getPassword()),
                 userForm.getEmail(),
                 roles,
                 userProfile,
@@ -108,5 +114,13 @@ public class AuthController {
         } else {
             return new ResponseEntity<>(user, HttpStatus.OK);
         }
+    }
+    @GetMapping("/user/{id}")
+    public ResponseEntity<Optional<User>> getUserById(@PathVariable Long id) {
+        Optional<User> currentUser = userService.findById(id);
+        if (!currentUser.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(currentUser, HttpStatus.OK);
     }
 }

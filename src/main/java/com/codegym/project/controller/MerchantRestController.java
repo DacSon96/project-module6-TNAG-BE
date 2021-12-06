@@ -63,6 +63,7 @@ public class MerchantRestController {
         return new ResponseEntity<>(userPage, HttpStatus.OK);
     }
 
+
     //    @Secured({RoleConst.ADMIN, RoleConst.USER})
     @PostMapping("/{id}/register")
     public ResponseEntity<User> registerMerchant(MerchantProfileForm merchantProfileForm, @PathVariable("id") Long id) throws IOException {

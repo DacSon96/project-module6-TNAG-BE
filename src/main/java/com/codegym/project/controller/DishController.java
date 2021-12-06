@@ -91,7 +91,7 @@ public class DishController {
         User user = userService.getUserFromAuthentication(authentication);
         MultipartFile multipartFile = dishForm.getImage();
         String fileName = multipartFile.getOriginalFilename();
-        FileCopyUtils.copy(dishForm.getImage().getBytes(), new File(fileUpload, fileName));
+        FileCopyUtils.copy(dishForm.getImage().getBytes(), new File(fileUpload + fileName));
         Dish dish = new Dish(
                 dishForm.getPrice(),
                 dishForm.getName(),

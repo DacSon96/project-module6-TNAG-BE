@@ -55,7 +55,6 @@ public class CartController {
             Cart cart = cartService.findByMerchantAndUser(merchant, user);
             return new ResponseEntity<>(cart, HttpStatus.OK);
         }
-
     }
 
     @Secured("ROLE_USER")

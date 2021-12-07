@@ -44,9 +44,8 @@ public class DishController {
     private String fileUpload;
 
     @GetMapping("/{id}/merchant")
-
-    public ResponseEntity<Page<Dish>> findAllDishesByMechant(@RequestParam(name = "q")Optional<String> q,
-                                                                 @PathVariable("id") Long id, Pageable pageable) {
+    public ResponseEntity<Page<Dish>> findAllDishesByMechant(@RequestParam(name = "q") Optional<String> q,
+                                                             @PathVariable("id") Long id, Pageable pageable) {
         Role role = roleService.findByName(RoleConst.MERCHANT);
         User user = userService.findByRolesContainingAndId(role, id);
         if (user == null) {
@@ -85,6 +84,34 @@ public class DishController {
         return new ResponseEntity<>(food.get(), HttpStatus.OK);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Dish> updateDish(@PathVariable Long id, DishForm dishForm, Authentication authentication) throws IOException {
+        User user = userService.getUserFromAuthentication(authentication);
+        Optional<Dish> dishOptional = dishService.findById(id);
+        String fileName;
+        if (dishForm.getImage() != null) {
+            MultipartFile multipartFile = dishForm.getImage();
+            fileName = multipartFile.getOriginalFilename();
+            FileCopyUtils.copy(dishForm.getImage().getBytes(), new File(fileUpload + fileName));
+        } else {
+            fileName = dishOptional.get().getImage();
+        }
+        if (!dishOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        dishForm.setId(id);
+        Dish dish = new Dish(
+                dishForm.getId(),
+                dishForm.getName(),
+                fileName,
+                dishForm.getDescription(),
+                dishForm.getPrice(),
+                user,
+                dishForm.getStatus()
+        );
+        return new ResponseEntity<>(dishService.save(dish), HttpStatus.OK);
+    }
+
     @Secured("ROLE_MERCHANT")
     @PostMapping
     public ResponseEntity<Dish> createDish(DishForm dishForm, Authentication authentication) throws IOException {
@@ -93,17 +120,18 @@ public class DishController {
         String fileName = multipartFile.getOriginalFilename();
         FileCopyUtils.copy(dishForm.getImage().getBytes(), new File(fileUpload + fileName));
         Dish dish = new Dish(
-                dishForm.getPrice(),
                 dishForm.getName(),
                 fileName,
                 dishForm.getDescription(),
+                dishForm.getPrice(),
                 user,
                 true
         );
         return new ResponseEntity<>(dishService.save(dish), HttpStatus.CREATED);
     }
+
     @GetMapping("/find")
-    public ResponseEntity<Page<Dish>> findfullName(@RequestParam(name = "name",required = false) String name,Pageable pageable) {
+    public ResponseEntity<Page<Dish>> findfullName(@RequestParam(name = "name", required = false) String name, Pageable pageable) {
         return ResponseEntity.ok(dishService.findByfullname(name, pageable));
     }
 

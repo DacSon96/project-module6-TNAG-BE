@@ -72,46 +72,10 @@ public class OrderController {
     public ResponseEntity<Orders> newOrder(@RequestBody OrdersForm ordersForm,
                                            @PathVariable("merchantId") Long merchantId,
                                            Authentication authentication){
-        UserDeliverAddress userDeliverAddress = ordersForm.getAddress();
-        PaymentMethod paymentMethod = ordersForm.getPaymentMethod();
-        if (userDeliverAddress.getId() == null || paymentMethod.getId() == null) {
+        if (ordersForm.getAddress().getId() == null || ordersForm.getPaymentMethod().getId() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        User user = userService.getUserFromAuthentication(authentication);
-        Role merchantRole = roleService.findByName(RoleConst.MERCHANT);
-        User merchant = userService.findByRolesContainingAndId(merchantRole, merchantId);
-        Coupon coupon = ordersForm.getCoupon();
-        String note = ordersForm.getNote();
-        OrderStatus orderStatus = orderStatusService.findByName(OrderStatusConst.CREATED);
-        LocalDateTime orderTime = Timer.getCurrentTime();
-        double totalPayment = 0;
-        double discount = 0;
-        if (merchant == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        Cart cart = cartService.findByMerchantAndUser(merchant, user);
-        Set<OrdersDetail> ordersDetailSet = ordersService.convertCartDetailToOrderDetail(cart);
-        for (OrdersDetail o: ordersDetailSet) {
-            orderDetailService.save(o);
-            totalPayment += o.getPrice() * o.getQuantity();
-        }
-        if (coupon != null) {
-            discount = coupon.getDiscount();
-        }
-
-        Orders orders = new Orders(
-                user,
-                orderTime,
-                userDeliverAddress,
-                totalPayment - discount,
-                note,
-                orderStatus,
-                coupon,
-                paymentMethod,
-                ordersDetailSet,
-                merchant
-                );
-        ordersService.save(orders);
+        Orders orders = ordersService.saveNewOrder(ordersForm, merchantId, authentication);
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 }

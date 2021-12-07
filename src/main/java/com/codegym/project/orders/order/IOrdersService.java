@@ -6,6 +6,7 @@ import com.codegym.project.orders.orderDetail.OrdersDetail;
 import com.codegym.project.users.users.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 
 import java.util.Set;
 
@@ -13,5 +14,7 @@ public interface IOrdersService extends IGeneralService<Orders> {
     Set<OrdersDetail> convertCartDetailToOrderDetail(Cart cart);
 
     Page<Orders> findAllByUserOrderByOrderTimeDesc(User user, Pageable pageable);
+
+    Orders saveNewOrder(OrdersForm ordersForm, Long merchantId, Authentication authentication);
 
 }

@@ -1,23 +1,24 @@
-package com.codegym.project.review;
+package com.codegym.project.notification;
 
 import com.codegym.project.users.users.User;
 import lombok.Data;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 
 @Entity
 @Data
-public class Review {
+public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    private User user;
+    private User sender;
+
+    @ManyToOne
+    private User receiver;
 
     private String content;
 
-    @Size(min = 1, max = 5)
-    private int rate;
+    private String routerLink;
 }

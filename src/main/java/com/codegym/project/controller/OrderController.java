@@ -31,7 +31,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -51,6 +51,24 @@ public class OrderController {
     @Autowired
     private IOrderDetailService orderDetailService;
 
+    @GetMapping("/user")
+    public ResponseEntity<Page<Orders>> getOrderByUser(Authentication authentication, @RequestParam(name = "sort", required = false) String sort, Pageable pageable) {
+        User user = userService.getUserFromAuthentication(authentication);
+        Page<Orders> orders = ordersService.findAllByUserOrderByOrderTimeDesc(user, pageable);
+        return new ResponseEntity<>(orders, HttpStatus.OK);
+
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Orders> findById(@PathVariable Long id) {
+        Optional<Orders> optionalOrders = ordersService.findById(id);
+        if (!optionalOrders.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(optionalOrders.get(), HttpStatus.OK );
+        }
+    }
+
     @Secured({"ROLE_USER"})
     @PostMapping("/{merchantId}")
     public ResponseEntity<Orders> newOrder(@RequestBody OrdersForm ordersForm,
@@ -58,7 +76,7 @@ public class OrderController {
                                            Authentication authentication){
         UserDeliverAddress userDeliverAddress = ordersForm.getAddress();
         PaymentMethod paymentMethod = ordersForm.getPaymentMethod();
-        if (userDeliverAddress == null || paymentMethod == null) {
+        if (userDeliverAddress.getId() == null || paymentMethod.getId() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         User user = userService.getUserFromAuthentication(authentication);
@@ -92,7 +110,8 @@ public class OrderController {
                 orderStatus,
                 coupon,
                 paymentMethod,
-                ordersDetailSet
+                ordersDetailSet,
+                merchant
                 );
         ordersService.save(orders);
         return new ResponseEntity<>(orders, HttpStatus.OK);
@@ -106,12 +125,21 @@ public class OrderController {
 //        return ResponseEntity.ok(ordersService.findByOrderFull(id,name,phone,pageable));
 //    }
 
-    @GetMapping("/search")
-    public ResponseEntity<Page<Orders>> find(@RequestParam(name = "id",required = false) Long id,
-                                             @RequestParam(name = "name", required= false) String name,
-                                             @RequestParam(name = "phone", required = false) String phone,
-                                             Pageable pageable){
-        return new ResponseEntity<>(ordersService.findOrdersByIdPhoneName(id, name, phone, pageable), HttpStatus.OK);
+//    @GetMapping("/search")
+//    public ResponseEntity<Page<Orders>> find(@RequestParam(name = "id",required = false) Long id,
+//                                             @RequestParam(name = "name", required= false) String name,
+//                                             @RequestParam(name = "phone", required = false) String phone,
+//                                             Pageable pageable){
+//        return new ResponseEntity<>(ordersService.findOrdersByIdPhoneName(id, name, phone, pageable), HttpStatus.OK);
+//    }
+
+    @GetMapping("/merchant/{merchantId}")
+    public ResponseEntity<Page<Orders>> findOrdersByMerchant( @PathVariable("merchantId") Long id, Pageable pageable){
+            Optional<User> merchant = userService.findById(id);
+            Page<Orders> orders= ordersService.findOrdersByMerchant(merchant.get(),pageable);
+            return new ResponseEntity<>(orders, HttpStatus.OK);
+
+
     }
 
 }

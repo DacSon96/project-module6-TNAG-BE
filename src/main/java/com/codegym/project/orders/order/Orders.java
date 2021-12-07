@@ -10,7 +10,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -25,6 +24,8 @@ public class Orders {
 
     @Column(nullable = false)
     private LocalDateTime orderTime;
+
+    private LocalDateTime finishedTime;
 
     @ManyToOne
     private UserDeliverAddress address;
@@ -49,10 +50,13 @@ public class Orders {
     @ManyToMany
     private Set<OrdersDetail> ordersDetails;
 
+    @ManyToOne
+    private User merchant;
+
     public Orders() {
     }
 
-    public Orders(User user, LocalDateTime orderTime, UserDeliverAddress address, double totalPayment, String note, OrderStatus orderStatus, Coupon coupon, PaymentMethod paymentMethod, Set<OrdersDetail> ordersDetails) {
+    public Orders(User user, LocalDateTime orderTime, UserDeliverAddress address, double totalPayment, String note, OrderStatus orderStatus, Coupon coupon, PaymentMethod paymentMethod, Set<OrdersDetail> ordersDetails, User merchant) {
         this.user = user;
         this.orderTime = orderTime;
         this.address = address;
@@ -62,5 +66,13 @@ public class Orders {
         this.coupon = coupon;
         this.paymentMethod = paymentMethod;
         this.ordersDetails = ordersDetails;
+        this.merchant = merchant;
+    }
+
+    public Orders(Long id, LocalDateTime orderTime, UserDeliverAddress address, String note) {
+        this.id = id;
+        this.orderTime = orderTime;
+        this.address = address;
+        this.note = note;
     }
 }

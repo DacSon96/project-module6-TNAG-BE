@@ -12,14 +12,10 @@ import javax.validation.constraints.Size;
 @Entity
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Dish {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
-    private double price;
 
     @Column(nullable = false)
     @Size(min = 4, max = 200)
@@ -32,16 +28,29 @@ public class Dish {
     @Size(max = 255)
     private String description;
 
+    @Column(nullable = false)
+    private double price;
+
     @ManyToOne
     private User merchant;
 
     private Boolean status;
 
-    public Dish(double price, String name, String image, String description, User merchant, Boolean status) {
-        this.price = price;
+    public Dish(String name, String image, String description, double price, User merchant, Boolean status) {
         this.name = name;
         this.image = image;
         this.description = description;
+        this.price = price;
+        this.merchant = merchant;
+        this.status = status;
+    }
+
+    public Dish(Long id, String name, String image, String description, double price, User merchant, Boolean status) {
+        this.id = id;
+        this.name = name;
+        this.image = image;
+        this.description = description;
+        this.price = price;
         this.merchant = merchant;
         this.status = status;
     }

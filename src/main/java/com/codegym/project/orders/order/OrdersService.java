@@ -4,6 +4,7 @@ import com.codegym.project.cart.cart.Cart;
 import com.codegym.project.cart.cartDetail.CartDetail;
 import com.codegym.project.cart.cartDetail.ICartDetailService;
 import com.codegym.project.orders.orderDetail.OrdersDetail;
+import com.codegym.project.users.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -56,6 +57,23 @@ public class OrdersService implements IOrdersService{
         }
         return ordersDetails;
     }
+
+    @Override
+    public Page<Orders> findAllByUserOrderByOrderTimeDesc(User user, Pageable pageable) {
+        return ordersRepository.findAllByUserOrderByOrderTimeDesc(user, pageable);
+    }
+
+    @Override
+    public Page<Orders> findOrdersByMerchant(User merchant, Pageable pageable) {
+        return ordersRepository.findOrdersByMerchant(merchant,pageable);
+    }
+
+
+
+//    @Override
+//    public Page<Orders> findOrdersByMerchantAndId(Long id, User merchant) {
+//        return ordersRepository.findOrdersByMerchantAndId(id,merchant);
+//    }
 
 //    @Override
 //    public Page<Orders> findOrdersByIdPhoneName(Long id, String fullName, String phone, Pageable pageable) {

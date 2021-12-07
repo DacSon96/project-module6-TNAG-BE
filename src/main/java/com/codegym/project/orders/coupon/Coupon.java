@@ -14,9 +14,9 @@ public class Coupon {
 
     private double discount;
 
-    private String code;
+    private String inputCode;
 
-    private double condition;
+    private double discountCondition;
 
     private String description;
 

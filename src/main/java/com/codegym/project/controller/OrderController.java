@@ -20,6 +20,8 @@ import com.codegym.project.users.userAddress.UserDeliverAddress;
 import com.codegym.project.users.users.IUserService;
 import com.codegym.project.users.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -27,7 +29,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -47,6 +49,24 @@ public class OrderController {
     @Autowired
     private IOrderDetailService orderDetailService;
 
+    @GetMapping("/user")
+    public ResponseEntity<Page<Orders>> getOrderByUser(Authentication authentication, @RequestParam(name = "sort", required = false) String sort, Pageable pageable) {
+        User user = userService.getUserFromAuthentication(authentication);
+        Page<Orders> orders = ordersService.findAllByUserOrderByOrderTimeDesc(user, pageable);
+        return new ResponseEntity<>(orders, HttpStatus.OK);
+
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Orders> findById(@PathVariable Long id) {
+        Optional<Orders> optionalOrders = ordersService.findById(id);
+        if (!optionalOrders.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(optionalOrders.get(), HttpStatus.OK );
+        }
+    }
+
     @Secured({"ROLE_USER"})
     @PostMapping("/{merchantId}")
     public ResponseEntity<Orders> newOrder(@RequestBody OrdersForm ordersForm,
@@ -54,7 +74,7 @@ public class OrderController {
                                            Authentication authentication){
         UserDeliverAddress userDeliverAddress = ordersForm.getAddress();
         PaymentMethod paymentMethod = ordersForm.getPaymentMethod();
-        if (userDeliverAddress == null || paymentMethod == null) {
+        if (userDeliverAddress.getId() == null || paymentMethod.getId() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         User user = userService.getUserFromAuthentication(authentication);
@@ -88,7 +108,8 @@ public class OrderController {
                 orderStatus,
                 coupon,
                 paymentMethod,
-                ordersDetailSet
+                ordersDetailSet,
+                merchant
                 );
         ordersService.save(orders);
         return new ResponseEntity<>(orders, HttpStatus.OK);

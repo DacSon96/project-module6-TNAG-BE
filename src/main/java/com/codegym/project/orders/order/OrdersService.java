@@ -56,4 +56,16 @@ public class OrdersService implements IOrdersService{
         }
         return ordersDetails;
     }
+
+//    @Override
+//    public Page<Orders> findOrdersByIdPhoneName(Long id, String fullName, String phone, Pageable pageable) {
+//        return ordersRepository.findOrdersByIdPhoneName(id,fullName,phone,pageable);
+//    }
+
+//    @Override
+//    public Page<orderDto> findByOrderFull(Long id, String name, String phone,Pageable pageable) {
+//        return ordersRepository.findByOrderFull(id,name,phone,pageable);
+//    }
+
+
 }

@@ -87,8 +87,7 @@ public class AuthController {
         UserDeliverAddress userDeliverAddress = new UserDeliverAddress(
                 userForm.getName(),
                 userForm.getPhone(),
-                user,
-                userForm.getAddress()
+                user
         );
         userAddressService.save(userDeliverAddress);
 

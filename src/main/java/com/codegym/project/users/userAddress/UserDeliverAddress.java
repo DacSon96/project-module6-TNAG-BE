@@ -24,7 +24,7 @@ public class UserDeliverAddress {
     @ManyToOne
     private User user;
 
-    @Column(nullable = false)
+    @Column
     private String address;
 
     public UserDeliverAddress() {

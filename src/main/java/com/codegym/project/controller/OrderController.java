@@ -4,10 +4,7 @@ import com.codegym.project.cart.cart.Cart;
 import com.codegym.project.cart.cart.ICartService;
 import com.codegym.project.helper.Timer;
 import com.codegym.project.orders.coupon.Coupon;
-import com.codegym.project.orders.order.IOrdersService;
-import com.codegym.project.orders.order.Orders;
-import com.codegym.project.orders.order.OrdersForm;
-import com.codegym.project.orders.order.orderDto;
+import com.codegym.project.orders.order.*;
 import com.codegym.project.orders.orderDetail.IOrderDetailService;
 import com.codegym.project.orders.orderDetail.OrdersDetail;
 import com.codegym.project.orders.orderStatus.IOrderStatusService;
@@ -31,6 +28,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -38,6 +36,8 @@ import java.util.Set;
 @CrossOrigin("*")
 @RequestMapping("/orders")
 public class OrderController {
+    @Autowired
+    private OrderFindBy orderFindBy;
     @Autowired
     private IOrdersService ordersService;
     @Autowired
@@ -134,11 +134,17 @@ public class OrderController {
 //    }
 
     @GetMapping("/merchant/{merchantId}")
-    public ResponseEntity<Page<Orders>> findOrdersByMerchant( @PathVariable("merchantId") Long id, Pageable pageable){
-            Optional<User> merchant = userService.findById(id);
-            Page<Orders> orders= ordersService.findOrdersByMerchant(merchant.get(),pageable);
-            return new ResponseEntity<>(orders, HttpStatus.OK);
-
+    public ResponseEntity<?> findOrdersByMerchant( @PathVariable("merchantId") Long id,
+                                                              @RequestParam(name = "q")Optional<String> q,
+                                                                      Pageable pageable){
+           if(!q.isPresent()) {
+               Optional<User> merchant = userService.findById(id);
+               Page<Orders> orders = ordersService.findOrdersByMerchant(merchant.get(), pageable);
+               return new ResponseEntity<>(orders, HttpStatus.OK);
+           }else {
+              List<Orders> orders = orderFindBy.getOrders("q",id);
+              return new ResponseEntity<>(orders,HttpStatus.OK);
+           }
 
     }
 

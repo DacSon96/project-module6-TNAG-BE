@@ -41,4 +41,10 @@ public interface IOrdersRepository extends JpaRepository<Orders, Long> {
 //    Page<Orders> findOrdersByMerchantAndId(Long id, User merchant);
 
 
+   Orders findOrdersByAddress_CustomerName(String customerName);
+
+
+
+
+
 }

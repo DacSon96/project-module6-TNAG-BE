@@ -68,6 +68,10 @@ public class OrdersService implements IOrdersService{
         return ordersRepository.findOrdersByMerchant(merchant,pageable);
     }
 
+    @Override
+    public Orders findOrdersByAddress_CustomerName(String customerName) {
+        return ordersRepository.findOrdersByAddress_CustomerName(customerName);
+    }
 
 
 //    @Override

@@ -24,4 +24,6 @@ public interface IOrdersService extends IGeneralService<Orders> {
 
 
 //    Page<Orders> findOrdersByMerchantAndId(Long id, User merchant);
+
+    Orders findOrdersByAddress_CustomerName(String customerName);
 }

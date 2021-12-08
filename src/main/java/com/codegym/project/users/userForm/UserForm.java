@@ -18,6 +18,7 @@ public class UserForm {
     private String fullName;
     private String phone;
     private String sex;
+    private String address;
 
 
 

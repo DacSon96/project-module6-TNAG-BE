@@ -9,4 +9,6 @@ public interface ICartRepository extends JpaRepository<Cart, Long> {
     Cart findByMerchant_IdAndUser_Id(Long merchantId, Long userId);
 
     Cart findByMerchantAndUser(User merchant, User user);
+
+    Iterable<Cart> findAllByUser(User user);
 }

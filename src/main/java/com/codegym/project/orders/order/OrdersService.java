@@ -123,7 +123,7 @@ public class OrdersService implements IOrdersService{
                 user,
                 orderTime,
                 userDeliverAddress,
-                totalPayment - discount,
+                ordersForm.getTotalPayment(),
                 note,
                 orderStatus,
                 coupon,

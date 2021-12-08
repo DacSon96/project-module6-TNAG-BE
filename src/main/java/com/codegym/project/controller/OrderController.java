@@ -106,7 +106,7 @@ public class OrderController {
                Page<Orders> orders = ordersService.findOrdersByMerchant(merchant.get(), pageable);
                return new ResponseEntity<>(orders, HttpStatus.OK);
            }else {
-              List<Orders> orders = orderFindBy.getOrders("q",id);
+              List<Orders> orders = orderFindBy.getOrders(q.get(),id);
               return new ResponseEntity<>(orders,HttpStatus.OK);
            }
 

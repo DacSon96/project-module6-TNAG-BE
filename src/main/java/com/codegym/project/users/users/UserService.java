@@ -56,6 +56,11 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public List<UserDto> findUserByCategory(Long idC) {
+        return userRepository.findUserByCategory(idC);
+    }
+
+    @Override
     public Page<User> findAllByRolesAndMerchantProfileNameContaining(Role role, String name, Pageable pageable) {
         return userRepository.findAllByRolesAndMerchantProfileNameContaining(role, name, pageable);
     }

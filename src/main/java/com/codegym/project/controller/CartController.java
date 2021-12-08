@@ -18,7 +18,6 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.Option;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -56,6 +55,16 @@ public class CartController {
             return new ResponseEntity<>(cart, HttpStatus.OK);
         }
     }
+
+    @Secured("ROLE_USER")
+    @GetMapping
+    public ResponseEntity<Iterable<Cart>> getALlCartByUser(Authentication authentication) {
+        User user = userService.getUserFromAuthentication(authentication);
+        Iterable<Cart> cart = cartService.findAllByUser(user);
+        return new ResponseEntity<>(cart, HttpStatus.OK);
+    }
+
+
 
     @Secured("ROLE_USER")
     @PostMapping("/{dishId}/{direction}")

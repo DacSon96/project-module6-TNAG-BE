@@ -5,11 +5,18 @@ import com.codegym.project.users.request.ShipperRegisterRequest;
 import com.codegym.project.users.shipperProfile.IShipperProfileService;
 import com.codegym.project.users.shipperProfile.ShipperProfile;
 import com.codegym.project.users.shipperProfile.ShipperRegisterForm;
+import com.codegym.project.dish.Dish;
+import com.codegym.project.dish.DishForm;
+import com.codegym.project.role.IRoleService;
+import com.codegym.project.role.Role;
 import com.codegym.project.users.userAddress.IUserAddressService;
 import com.codegym.project.users.userAddress.UserDeliverAddress;
+import com.codegym.project.users.userForm.UserForm;
 import com.codegym.project.users.userProfile.AvatarUploadForm;
 import com.codegym.project.users.userProfile.IUserProfileService;
 import com.codegym.project.users.userProfile.UserProfile;
+import com.codegym.project.users.userStatus.IUserStatusService;
+import com.codegym.project.users.userStatus.UserStatus;
 import com.codegym.project.users.users.IUserService;
 import com.codegym.project.users.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +31,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -38,6 +47,12 @@ public class UserController {
 
     @Autowired
     private IUserProfileService userProfileService;
+
+    @Autowired
+    private IRoleService roleService;
+
+    @Autowired
+    private IUserStatusService userStatusService;
 
     @Autowired
     private IShipperProfileService shipperProfileService;

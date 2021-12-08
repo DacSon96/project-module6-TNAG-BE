@@ -4,9 +4,7 @@ import com.codegym.project.cart.cart.Cart;
 import com.codegym.project.cart.cart.ICartService;
 import com.codegym.project.helper.Timer;
 import com.codegym.project.orders.coupon.Coupon;
-import com.codegym.project.orders.order.IOrdersService;
-import com.codegym.project.orders.order.Orders;
-import com.codegym.project.orders.order.OrdersForm;
+import com.codegym.project.orders.order.*;
 import com.codegym.project.orders.orderDetail.IOrderDetailService;
 import com.codegym.project.orders.orderDetail.OrdersDetail;
 import com.codegym.project.orders.orderStatus.IOrderStatusService;
@@ -19,6 +17,7 @@ import com.codegym.project.role.RoleConst;
 import com.codegym.project.users.userAddress.UserDeliverAddress;
 import com.codegym.project.users.users.IUserService;
 import com.codegym.project.users.users.User;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +28,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -36,6 +36,8 @@ import java.util.Set;
 @CrossOrigin("*")
 @RequestMapping("/orders")
 public class OrderController {
+    @Autowired
+    private OrderFindBy orderFindBy;
     @Autowired
     private IOrdersService ordersService;
     @Autowired
@@ -78,4 +80,36 @@ public class OrderController {
         Orders orders = ordersService.saveNewOrder(ordersForm, merchantId, authentication);
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
+
+//    @GetMapping("/search")
+//    public ResponseEntity<Page<orderDto>> find(@RequestParam(name = "id",required = false)Long id,
+//                                               @RequestParam(name = "name",required = false)String name,
+//                                               @RequestParam(name = "phone",required = false)String phone,
+//                                               Pageable pageable){
+//        return ResponseEntity.ok(ordersService.findByOrderFull(id,name,phone,pageable));
+//    }
+
+//    @GetMapping("/search")
+//    public ResponseEntity<Page<Orders>> find(@RequestParam(name = "id",required = false) Long id,
+//                                             @RequestParam(name = "name", required= false) String name,
+//                                             @RequestParam(name = "phone", required = false) String phone,
+//                                             Pageable pageable){
+//        return new ResponseEntity<>(ordersService.findOrdersByIdPhoneName(id, name, phone, pageable), HttpStatus.OK);
+//    }
+
+    @GetMapping("/merchant/{merchantId}")
+    public ResponseEntity<?> findOrdersByMerchant( @PathVariable("merchantId") Long id,
+                                                              @RequestParam(name = "q")Optional<String> q,
+                                                                      Pageable pageable){
+           if(!q.isPresent()) {
+               Optional<User> merchant = userService.findById(id);
+               Page<Orders> orders = ordersService.findOrdersByMerchant(merchant.get(), pageable);
+               return new ResponseEntity<>(orders, HttpStatus.OK);
+           }else {
+              List<Orders> orders = orderFindBy.getOrders("q",id);
+              return new ResponseEntity<>(orders,HttpStatus.OK);
+           }
+
+    }
+
 }

@@ -13,6 +13,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IOrdersRepository extends JpaRepository<Orders, Long> {
+    Page<Orders> findAllByMerchantOrderByOrderTimeDesc(User user, Pageable pageable);
+    Page<Orders> findAllByMerchantAndOrderStatusNameOrderByOrderTimeDesc(User user, String name,Pageable pageable);
     Page<Orders> findAllByUserOrderByOrderTimeDesc(User user, Pageable pageable);
 //    @Query("select o.id,o.address.address,o.orderTime,o.totalPayment,u.userProfile.fullName,u.userProfile.phone" +
 //            " from Orders o join o.user.userProfile," +

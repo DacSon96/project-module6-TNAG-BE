@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class CartService implements ICartService{
+public class CartService implements ICartService {
     @Autowired
     private ICartRepository cartRepository;
 
@@ -41,5 +41,10 @@ public class CartService implements ICartService{
     @Override
     public Cart findByMerchantAndUser(User merchant, User user) {
         return cartRepository.findByMerchantAndUser(merchant, user);
+    }
+
+    @Override
+    public Iterable<Cart> findAllByUser(User user) {
+        return cartRepository.findAllByUser(user);
     }
 }

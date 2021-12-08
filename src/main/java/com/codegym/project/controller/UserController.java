@@ -79,4 +79,24 @@ public class UserController {
 
     }
 
+    @Secured("ROLE_USER")
+    @PostMapping("/address")
+    public ResponseEntity<UserDeliverAddress> userDeliverAddressResponseEntity(@RequestBody UserDeliverAddress userDeliverAddress, Authentication authentication) {
+        User user = userService.getUserFromAuthentication(authentication);
+        userDeliverAddress.setUser(user);
+        return new ResponseEntity<>(userAddressService.save(userDeliverAddress), HttpStatus.CREATED);
+    }
+
+    @Secured("ROLE_USER")
+    @DeleteMapping("/address/{id}")
+    public ResponseEntity<UserDeliverAddress> deleteUserAddress(@PathVariable Long id) {
+        Optional<UserDeliverAddress> optionalUserDeliverAddress = userAddressService.findById(id);
+        if (!optionalUserDeliverAddress.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            userAddressService.deleteById(id);
+            return new ResponseEntity<>(optionalUserDeliverAddress.get(), HttpStatus.OK);
+        }
+    }
+
 }

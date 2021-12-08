@@ -68,4 +68,11 @@ public class Orders {
         this.ordersDetails = ordersDetails;
         this.merchant = merchant;
     }
+
+    public Orders(Long id, LocalDateTime orderTime, UserDeliverAddress address, String note) {
+        this.id = id;
+        this.orderTime = orderTime;
+        this.address = address;
+        this.note = note;
+    }
 }

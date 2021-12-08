@@ -134,4 +134,32 @@ public class OrdersService implements IOrdersService{
         orders = save(orders);
         return orders;
     }
+
+    @Override
+    public Page<Orders> findOrdersByMerchant(User merchant, Pageable pageable) {
+        return ordersRepository.findOrdersByMerchant(merchant,pageable);
+    }
+
+    @Override
+    public Orders findOrdersByAddress_CustomerName(String customerName) {
+        return ordersRepository.findOrdersByAddress_CustomerName(customerName);
+    }
+
+
+//    @Override
+//    public Page<Orders> findOrdersByMerchantAndId(Long id, User merchant) {
+//        return ordersRepository.findOrdersByMerchantAndId(id,merchant);
+//    }
+
+//    @Override
+//    public Page<Orders> findOrdersByIdPhoneName(Long id, String fullName, String phone, Pageable pageable) {
+//        return ordersRepository.findOrdersByIdPhoneName(id,fullName,phone,pageable);
+//    }
+
+//    @Override
+//    public Page<orderDto> findByOrderFull(Long id, String name, String phone,Pageable pageable) {
+//        return ordersRepository.findByOrderFull(id,name,phone,pageable);
+//    }
+
+
 }

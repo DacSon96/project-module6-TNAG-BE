@@ -1,5 +1,10 @@
 package com.codegym.project.controller;
 
+import com.codegym.project.users.request.IShipperRequestService;
+import com.codegym.project.users.request.ShipperRegisterRequest;
+import com.codegym.project.users.shipperProfile.IShipperProfileService;
+import com.codegym.project.users.shipperProfile.ShipperProfile;
+import com.codegym.project.users.shipperProfile.ShipperRegisterForm;
 import com.codegym.project.users.userAddress.IUserAddressService;
 import com.codegym.project.users.userAddress.UserDeliverAddress;
 import com.codegym.project.users.userProfile.AvatarUploadForm;
@@ -33,6 +38,12 @@ public class UserController {
 
     @Autowired
     private IUserProfileService userProfileService;
+
+    @Autowired
+    private IShipperProfileService shipperProfileService;
+
+    @Autowired
+    private IShipperRequestService shipperRequestService;
 
     @Value("${file-upload}")
     private String fileUpload;
@@ -99,4 +110,36 @@ public class UserController {
         }
     }
 
+    @PostMapping("/register/shipper")
+    public ResponseEntity<ShipperRegisterRequest> registerShipper(ShipperRegisterForm shipperRegisterForm, Authentication authentication) throws IOException {
+        User user = userService.getUserFromAuthentication(authentication);
+        String driverLicense = saveFileUpload(shipperRegisterForm.getDriverLicense()) ;
+        String idCardFront = saveFileUpload(shipperRegisterForm.getIdCardFront());
+        String idCardBack = saveFileUpload(shipperRegisterForm.getIdCardBack());
+        String vehicleOwner = saveFileUpload(shipperRegisterForm.getVehicleOwnershipCertificate());
+        String profession = shipperRegisterForm.getProfession();
+        ShipperProfile shipperProfile = new ShipperProfile(
+                driverLicense,
+                idCardFront,
+                idCardBack,
+                vehicleOwner,
+                profession
+        );
+
+        user.setShipperProfile(shipperProfile);
+        shipperProfile = shipperProfileService.save(shipperProfile);
+        ShipperRegisterRequest shipperRegisterRequest = new ShipperRegisterRequest(
+                user,
+                shipperProfile,
+                null
+        );
+        shipperRegisterRequest = shipperRequestService.save(shipperRegisterRequest);
+        return new ResponseEntity<>(shipperRegisterRequest, HttpStatus.OK);
+    }
+
+    private String saveFileUpload(MultipartFile file) throws IOException {
+        String fileName = file.getOriginalFilename();
+        FileCopyUtils.copy(file.getBytes(), new File(fileUpload, fileName));
+        return fileName;
+    }
 }

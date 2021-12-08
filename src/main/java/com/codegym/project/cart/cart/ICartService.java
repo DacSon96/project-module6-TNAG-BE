@@ -8,5 +8,6 @@ public interface ICartService extends IGeneralService<Cart> {
 
     Cart findByMerchantAndUser(User merchant, User user);
 
+    Iterable<Cart> findAllByUser(User user);
 
 }

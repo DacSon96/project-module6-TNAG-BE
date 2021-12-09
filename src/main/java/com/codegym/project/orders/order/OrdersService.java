@@ -155,6 +155,16 @@ public class OrdersService implements IOrdersService{
         return ordersRepository.findOrdersByAddress_CustomerName(customerName);
     }
 
+    @Override
+    public Page<Orders> findAllByOrderStatusOrderByOrderTimeDesc(OrderStatus orderStatus, Pageable pageable) {
+        return ordersRepository.findAllByOrderStatusOrderByOrderTimeDesc(orderStatus,pageable);
+    }
+
+    @Override
+    public Page<Orders> findAllByShipperOrderByOrderTimeDesc(User shipper, Pageable pageable) {
+        return ordersRepository.findAllByShipperOrderByOrderTimeDesc(shipper,pageable);
+    }
+
 
 //    @Override
 //    public Page<Orders> findOrdersByMerchantAndId(Long id, User merchant) {

@@ -3,6 +3,7 @@ package com.codegym.project.orders.order;
 import com.codegym.project.IGeneralService;
 import com.codegym.project.cart.cart.Cart;
 import com.codegym.project.orders.orderDetail.OrdersDetail;
+import com.codegym.project.orders.orderStatus.OrderStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
@@ -32,4 +33,9 @@ public interface IOrdersService extends IGeneralService<Orders> {
 //    Page<Orders> findOrdersByMerchantAndId(Long id, User merchant);
 
     Orders findOrdersByAddress_CustomerName(String customerName);
+
+    Page<Orders> findAllByOrderStatusOrderByOrderTimeDesc(OrderStatus orderStatus,Pageable pageable);
+
+    Page<Orders> findAllByShipperOrderByOrderTimeDesc(User shipper,Pageable pageable);
+
 }

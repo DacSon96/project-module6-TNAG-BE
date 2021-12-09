@@ -1,5 +1,6 @@
 package com.codegym.project.orders.order;
 
+import com.codegym.project.orders.orderStatus.OrderStatus;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +11,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+
 
 @Repository
 public interface IOrdersRepository extends JpaRepository<Orders, Long> {
@@ -45,8 +48,8 @@ public interface IOrdersRepository extends JpaRepository<Orders, Long> {
 
    Orders findOrdersByAddress_CustomerName(String customerName);
 
+   Page<Orders> findAllByOrderStatusOrderByOrderTimeDesc(OrderStatus orderStatus,Pageable pageable);
 
-
-
+   Page<Orders> findAllByShipperOrderByOrderTimeDesc(User shipper,Pageable pageable);
 
 }

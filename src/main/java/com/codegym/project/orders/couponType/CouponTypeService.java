@@ -31,4 +31,9 @@ public class CouponTypeService implements ICouponTypeService {
     public void deleteById(Long id) {
         couponTypeRepository.deleteById(id);
     }
+
+    @Override
+    public Iterable<CouponType> findAll() {
+        return couponTypeRepository.findAll();
+    }
 }

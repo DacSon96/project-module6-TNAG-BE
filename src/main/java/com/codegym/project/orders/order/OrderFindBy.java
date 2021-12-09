@@ -21,9 +21,15 @@ public class OrderFindBy {
     @Autowired
     JdbcTemplate jdbcTemplate;
     public List<orderDto> findOrderDto(String value,Long merchantId){
-//        String sql = "select t1.id, t1.note, t1.order_time, t1.total_payment, t3.customer_name, t3.phone From orders as t1 left join user as t2 on t1.user_id = t2.id left join user_deliver_address as t3 on t2.id = t3.user_id " +
-//                "where t3.customer_name like '%" + value + "%'or t3.phone like '%" + value + "%' or t1.id = " + value;
-        String sql = "select t1.id, t1.note, t1.order_time, t1.total_payment, t3.customer_name, t3.phone From orders as t1 left join user as t2 on t1.user_id = t2.id left join user_deliver_address as t3 on t2.id = t3.user_id  + where   t1.merchantId =' " +merchantId +" '  and   + t3.customer_name like '%" + value + "%'or t3.phone like '%" + value + "%' or t1.id = "  + value;
+        String sql = "";
+        try{
+            Long idValue = Long.parseLong(value);
+            sql = "select t1.id, t1.note, t1.order_time, t1.total_payment, t3.customer_name, t3.phone From orders as t1 left join user as t2 on t1.user_id = t2.id left join user_deliver_address as t3 on t2.id = t3.user_id where   t1.merchant_id="+merchantId+"  and   + t3.customer_name like '%"+idValue+"%'or t3.phone like '%"+idValue+"%' or t1.id = "+idValue;
+        }catch (Exception e){
+            sql = "select t1.id, t1.note, t1.order_time, t1.total_payment, t3.customer_name, t3.phone From orders as t1 left join user as t2 on t1.user_id = t2.id left join user_deliver_address as t3 on t2.id = t3.user_id where   t1.merchant_id="+merchantId+"  and   + t3.customer_name like '%"+value+"%'or t3.phone like '%"+value+"%' ";
+
+        }
+
 //        SqlParameterSource sqlParameterSource = new MapSqlParameterSource().addValue("value", value);
          List<orderDto> orderDtoList = jdbcTemplate.query(sql, (rs,i) -> toOrderDto(rs));
          return orderDtoList;
@@ -56,6 +62,5 @@ public class OrderFindBy {
             orderList.add(orders);
         });
         return orderList;
-
     }
 }

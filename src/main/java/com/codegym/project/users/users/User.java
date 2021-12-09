@@ -2,6 +2,7 @@ package com.codegym.project.users.users;
 
 import com.codegym.project.role.Role;
 import com.codegym.project.users.merchantProfile.MerchantProfile;
+import com.codegym.project.users.shipperProfile.ShipperProfile;
 import com.codegym.project.users.userProfile.UserProfile;
 import com.codegym.project.users.userStatus.UserStatus;
 import io.micrometer.core.lang.Nullable;
@@ -42,6 +43,9 @@ public class User {
 
     @OneToOne
     private MerchantProfile merchantProfile;
+
+    @OneToOne
+    private ShipperProfile shipperProfile;
 
     @ManyToOne
     private UserStatus userStatus;

@@ -1,5 +1,10 @@
 package com.codegym.project.controller;
 
+import com.codegym.project.users.request.IShipperRequestService;
+import com.codegym.project.users.request.ShipperRegisterRequest;
+import com.codegym.project.users.shipperProfile.IShipperProfileService;
+import com.codegym.project.users.shipperProfile.ShipperProfile;
+import com.codegym.project.users.shipperProfile.ShipperRegisterForm;
 import com.codegym.project.dish.Dish;
 import com.codegym.project.dish.DishForm;
 import com.codegym.project.role.IRoleService;
@@ -14,6 +19,8 @@ import com.codegym.project.users.userStatus.IUserStatusService;
 import com.codegym.project.users.userStatus.UserStatus;
 import com.codegym.project.users.users.IUserService;
 import com.codegym.project.users.users.User;
+import com.codegym.project.users.users.UserDto;
+import com.codegym.project.users.users.UserFindBy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -26,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -48,6 +56,15 @@ public class UserController {
 
     @Autowired
     private IUserStatusService userStatusService;
+
+    @Autowired
+    private IShipperProfileService shipperProfileService;
+
+    @Autowired
+    private IShipperRequestService shipperRequestService;
+
+    @Autowired
+    private UserFindBy userFindBy;
 
     @Value("${file-upload}")
     private String fileUpload;
@@ -113,5 +130,46 @@ public class UserController {
             return new ResponseEntity<>(optionalUserDeliverAddress.get(), HttpStatus.OK);
         }
     }
+    @GetMapping("/findUserByCategory/{id}")
+    public ResponseEntity<List<?>>findUserByCateory(@PathVariable("id") Long id){
+        List<UserDto> userDtoList = userFindBy.findUserDto(id);
+        if(userDtoList.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }else {
+            return new ResponseEntity<>(userDtoList,HttpStatus.OK);
+        }
+    }
 
+    @PostMapping("/register/shipper")
+    public ResponseEntity<ShipperRegisterRequest> registerShipper(ShipperRegisterForm shipperRegisterForm, Authentication authentication) throws IOException {
+        User user = userService.getUserFromAuthentication(authentication);
+        String driverLicense = saveFileUpload(shipperRegisterForm.getDriverLicense()) ;
+        String idCardFront = saveFileUpload(shipperRegisterForm.getIdCardFront());
+        String idCardBack = saveFileUpload(shipperRegisterForm.getIdCardBack());
+        String vehicleOwner = saveFileUpload(shipperRegisterForm.getVehicleOwnershipCertificate());
+        String profession = shipperRegisterForm.getProfession();
+        ShipperProfile shipperProfile = new ShipperProfile(
+                driverLicense,
+                idCardFront,
+                idCardBack,
+                vehicleOwner,
+                profession
+        );
+
+        user.setShipperProfile(shipperProfile);
+        shipperProfile = shipperProfileService.save(shipperProfile);
+        ShipperRegisterRequest shipperRegisterRequest = new ShipperRegisterRequest(
+                user,
+                shipperProfile,
+                null
+        );
+        shipperRegisterRequest = shipperRequestService.save(shipperRegisterRequest);
+        return new ResponseEntity<>(shipperRegisterRequest, HttpStatus.OK);
+    }
+
+    private String saveFileUpload(MultipartFile file) throws IOException {
+        String fileName = file.getOriginalFilename();
+        FileCopyUtils.copy(file.getBytes(), new File(fileUpload, fileName));
+        return fileName;
+    }
 }

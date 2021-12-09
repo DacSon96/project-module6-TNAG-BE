@@ -12,6 +12,8 @@ public class OrdersForm {
     private Coupon coupon;
     private PaymentMethod paymentMethod;
     private String note;
+    private double totalPayment;
+
     public OrdersForm() {
     }
 }

@@ -36,6 +36,4 @@ public interface IUserRepository extends JpaRepository<User, Long> {
 //    @Query("select t1.id, t2.name, t2.address, t2.thumbnail from User t1 left join MerchantProfile t2 on t1.merchantProfile.id = t2.id left join ")
     List<UserDto> findUserByCategory(@Param("id") Long id);
 
-
-
 }

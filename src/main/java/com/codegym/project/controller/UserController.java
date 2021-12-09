@@ -8,6 +8,7 @@ import com.codegym.project.users.userProfile.UserProfile;
 import com.codegym.project.users.users.IUserService;
 import com.codegym.project.users.users.User;
 import com.codegym.project.users.users.UserDto;
+import com.codegym.project.users.users.UserFindBy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,9 @@ public class UserController {
 
     @Autowired
     private IUserProfileService userProfileService;
+
+    @Autowired
+    private UserFindBy userFindBy;
 
     @Value("${file-upload}")
     private String fileUpload;
@@ -101,8 +105,8 @@ public class UserController {
         }
     }
     @GetMapping("/findUserByCategory/{id}")
-    public ResponseEntity<List<UserDto>> findUserByCateory(@PathVariable("id") Long id){
-        List<UserDto> userDtoList = userService.findUserByCategory(id);
+    public ResponseEntity<List<?>>findUserByCateory(@PathVariable("id") Long id){
+        List<UserDto> userDtoList = userFindBy.findUserDto(id);
         return new ResponseEntity<>(userDtoList,HttpStatus.OK);
     }
 

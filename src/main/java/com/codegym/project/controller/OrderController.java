@@ -24,6 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -68,7 +69,7 @@ public class OrderController {
         if (!optionalOrders.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            return new ResponseEntity<>(optionalOrders, HttpStatus.OK );
+            return new ResponseEntity<>(optionalOrders, HttpStatus.OK);
         }
     }
 
@@ -76,15 +77,16 @@ public class OrderController {
     @PostMapping("/{merchantId}")
     public ResponseEntity<Orders> newOrder(@RequestBody OrdersForm ordersForm,
                                            @PathVariable("merchantId") Long merchantId,
-                                           Authentication authentication){
+                                           Authentication authentication) {
         if (ordersForm.getAddress().getId() == null || ordersForm.getPaymentMethod().getId() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Orders orders = ordersService.saveNewOrder(ordersForm, merchantId, authentication);
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
+
     @GetMapping("/merchant")
-    public  ResponseEntity<Page<Orders>> getOrderByMerchantId(
+    public ResponseEntity<Page<Orders>> getOrderByMerchantId(
             Authentication authentication,
             @RequestParam(name = "q") Optional<String> q,
             @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
@@ -102,13 +104,37 @@ public class OrderController {
         if (user == null || user.getMerchantProfile() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else if (!q.isPresent()) {
-            Page<Orders> orders = ordersService.findAllByMerchantOrderByOrderTime(user,pageable);
+            Page<Orders> orders = ordersService.findAllByMerchantOrderByOrderTime(user, pageable);
             return new ResponseEntity<>(orders, HttpStatus.OK);
         } else {
-            Page<Orders> orders = ordersService.findAllByMerchantAndOrderStatusNameOrderByOrderTime(user,q.get(),pageable);
+            Page<Orders> orders = ordersService.findAllByMerchantAndOrderStatusNameOrderByOrderTime(user, q.get(), pageable);
+            return new ResponseEntity<>(orders, HttpStatus.OK);
+        }
+    }
+
+    @GetMapping("/createdOrders")
+    public ResponseEntity<Page<Orders>> getCreatedOrder(@PageableDefault(sort = "id", size = 5) Pageable pageable) {
+        OrderStatus status = orderStatusService.findByName(OrderStatusConst.CREATED);
+        Page<Orders> orders = ordersService.findAllByOrderStatusOrderByOrderTimeDesc(status, pageable);
+        return new ResponseEntity<>(orders, HttpStatus.OK);
+    }
+
+    @GetMapping("/shipper")
+    public ResponseEntity<Page<Orders>> getOrderByShipper(Authentication authentication,
+                                                          @PageableDefault(sort = "id", size = 5) Pageable pageable) {
+        User shipper = userService.getUserFromAuthentication(authentication);
+        Boolean checkShipper = false;
+        for (Role role : shipper.getRoles()) {
+            if (role.getName().equals(RoleConst.SHIPPER)) {
+                checkShipper = true;
+            }
+        }
+        if (!checkShipper) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        } else {
+            Page<Orders> orders = ordersService.findAllByShipperOrderByOrderTimeDesc(shipper, pageable);
             return new ResponseEntity<>(orders, HttpStatus.OK);
         }
 
     }
-
 }

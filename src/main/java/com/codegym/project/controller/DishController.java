@@ -131,7 +131,7 @@ public class DishController {
     }
 
     @GetMapping("/find")
-    public ResponseEntity<Page<Dish>> findfullName(@RequestParam(name = "name", required = false) String name, Pageable pageable) {
+    public ResponseEntity<Page<Dish>> findFullName(@RequestParam(name = "name", required = false) String name, Pageable pageable) {
         return ResponseEntity.ok(dishService.findByfullname(name, pageable));
     }
 

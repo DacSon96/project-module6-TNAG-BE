@@ -5,6 +5,7 @@ import com.codegym.project.role.Role;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.codegym.project.users.userStatus.UserStatus;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -23,4 +24,6 @@ public interface IUserService extends IGeneralService<User>, UserDetailsService 
     Page<User> findAllByRolesAndMerchantProfileNameContaining(Role role, String name, Pageable pageable);
 
     User getUserFromAuthentication(Authentication authentication);
+
+    List<UserDto> findUserByCategory(Long idC);
 }

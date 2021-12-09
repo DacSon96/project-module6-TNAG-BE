@@ -80,6 +80,7 @@ public class OrderController {
         if (ordersForm.getAddress().getId() == null || ordersForm.getPaymentMethod().getId() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
         Orders orders = ordersService.saveNewOrder(ordersForm, merchantId, authentication);
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }

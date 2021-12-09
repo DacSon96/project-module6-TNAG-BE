@@ -77,7 +77,7 @@ public class OrderController {
     @PostMapping("/{merchantId}")
     public ResponseEntity<Orders> newOrder(@RequestBody OrdersForm ordersForm,
                                            @PathVariable("merchantId") Long merchantId,
-                                           Authentication authentication) {
+                                           Authentication authentication){
         if (ordersForm.getAddress().getId() == null || ordersForm.getPaymentMethod().getId() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -85,8 +85,38 @@ public class OrderController {
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
+
+//    @GetMapping("/search")
+//    public ResponseEntity<Page<orderDto>> find(@RequestParam(name = "id",required = false)Long id,
+//                                               @RequestParam(name = "name",required = false)String name,
+//                                               @RequestParam(name = "phone",required = false)String phone,
+//                                               Pageable pageable){
+//        return ResponseEntity.ok(ordersService.findByOrderFull(id,name,phone,pageable));
+//    }
+
+//    @GetMapping("/search")
+//    public ResponseEntity<Page<Orders>> find(@RequestParam(name = "id",required = false) Long id,
+//                                             @RequestParam(name = "name", required= false) String name,
+//                                             @RequestParam(name = "phone", required = false) String phone,
+//                                             Pageable pageable){
+//        return new ResponseEntity<>(ordersService.findOrdersByIdPhoneName(id, name, phone, pageable), HttpStatus.OK);
+//    }
+
+    @GetMapping("/merchant/{merchantId}")
+    public ResponseEntity<?> findOrdersByMerchant( @PathVariable("merchantId") Long id,
+                                                              @RequestParam(name = "q")Optional<String> q,
+                                                                      Pageable pageable) {
+//        if (!q.isPresent()) {
+//            Optional<User> merchant = userService.findById(id);
+//            Page<Orders> orders = ordersService.findOrdersByMerchant(merchant.get(), pageable);
+//            return new ResponseEntity<>(orders, HttpStatus.OK);
+//        } else {
+            List<Orders> orders = orderFindBy.getOrders(q.get(), id);
+            return new ResponseEntity<>(orders, HttpStatus.OK);
+//        }
+    }
     @GetMapping("/merchant")
-    public ResponseEntity<Page<Orders>> getOrderByMerchantId(
+    public  ResponseEntity<Page<Orders>> getOrderByMerchantId(
             Authentication authentication,
             @RequestParam(name = "q") Optional<String> q,
             @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
@@ -104,10 +134,10 @@ public class OrderController {
         if (user == null || user.getMerchantProfile() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else if (!q.isPresent()) {
-            Page<Orders> orders = ordersService.findAllByMerchantOrderByOrderTime(user, pageable);
+            Page<Orders> orders = ordersService.findAllByMerchantOrderByOrderTime(user,pageable);
             return new ResponseEntity<>(orders, HttpStatus.OK);
         } else {
-            Page<Orders> orders = ordersService.findAllByMerchantAndOrderStatusNameOrderByOrderTime(user, q.get(), pageable);
+            Page<Orders> orders = ordersService.findAllByMerchantAndOrderStatusNameOrderByOrderTime(user,q.get(),pageable);
             return new ResponseEntity<>(orders, HttpStatus.OK);
         }
     }
@@ -137,4 +167,5 @@ public class OrderController {
         }
 
     }
+
 }

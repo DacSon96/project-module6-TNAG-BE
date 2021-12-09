@@ -1,5 +1,6 @@
 package com.codegym.project.controller;
 
+import com.codegym.project.orders.coupon.Coupon;
 import com.codegym.project.role.IRoleService;
 import com.codegym.project.role.Role;
 import com.codegym.project.role.RoleConst;
@@ -128,6 +129,4 @@ public class MerchantProfileController {
         Page<User> merchantPage = userService.findAllByRolesAndMerchantProfileNameContaining(role, searchValue, pageable);
         return new ResponseEntity<>(merchantPage, HttpStatus.OK);
     }
-
-
 }

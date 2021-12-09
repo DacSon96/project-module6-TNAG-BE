@@ -13,6 +13,8 @@ public class OrdersForm {
     private Coupon coupon;
     private PaymentMethod paymentMethod;
     private String note;
+    private double totalPayment;
+
     private User user;
     private User merchant;
     public OrdersForm() {

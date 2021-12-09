@@ -80,8 +80,39 @@ public class OrderController {
         if (ordersForm.getAddress().getId() == null || ordersForm.getPaymentMethod().getId() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
         Orders orders = ordersService.saveNewOrder(ordersForm, merchantId, authentication);
         return new ResponseEntity<>(orders, HttpStatus.OK);
+    }
+
+//    @GetMapping("/search")
+//    public ResponseEntity<Page<orderDto>> find(@RequestParam(name = "id",required = false)Long id,
+//                                               @RequestParam(name = "name",required = false)String name,
+//                                               @RequestParam(name = "phone",required = false)String phone,
+//                                               Pageable pageable){
+//        return ResponseEntity.ok(ordersService.findByOrderFull(id,name,phone,pageable));
+//    }
+
+//    @GetMapping("/search")
+//    public ResponseEntity<Page<Orders>> find(@RequestParam(name = "id",required = false) Long id,
+//                                             @RequestParam(name = "name", required= false) String name,
+//                                             @RequestParam(name = "phone", required = false) String phone,
+//                                             Pageable pageable){
+//        return new ResponseEntity<>(ordersService.findOrdersByIdPhoneName(id, name, phone, pageable), HttpStatus.OK);
+//    }
+
+    @GetMapping("/merchant/{merchantId}")
+    public ResponseEntity<?> findOrdersByMerchant( @PathVariable("merchantId") Long id,
+                                                              @RequestParam(name = "q")Optional<String> q,
+                                                                      Pageable pageable) {
+//        if (!q.isPresent()) {
+//            Optional<User> merchant = userService.findById(id);
+//            Page<Orders> orders = ordersService.findOrdersByMerchant(merchant.get(), pageable);
+//            return new ResponseEntity<>(orders, HttpStatus.OK);
+//        } else {
+            List<Orders> orders = orderFindBy.getOrders(q.get(), id);
+            return new ResponseEntity<>(orders, HttpStatus.OK);
+//        }
     }
     @GetMapping("/merchant")
     public  ResponseEntity<Page<Orders>> getOrderByMerchantId(

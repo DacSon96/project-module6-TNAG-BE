@@ -14,6 +14,8 @@ import com.codegym.project.users.userStatus.IUserStatusService;
 import com.codegym.project.users.userStatus.UserStatus;
 import com.codegym.project.users.users.IUserService;
 import com.codegym.project.users.users.User;
+import com.codegym.project.users.users.UserDto;
+import com.codegym.project.users.users.UserFindBy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -48,6 +51,9 @@ public class UserController {
 
     @Autowired
     private IUserStatusService userStatusService;
+
+    @Autowired
+    private UserFindBy userFindBy;
 
     @Value("${file-upload}")
     private String fileUpload;
@@ -111,6 +117,15 @@ public class UserController {
         } else {
             userAddressService.deleteById(id);
             return new ResponseEntity<>(optionalUserDeliverAddress.get(), HttpStatus.OK);
+        }
+    }
+    @GetMapping("/findUserByCategory/{id}")
+    public ResponseEntity<List<?>>findUserByCateory(@PathVariable("id") Long id){
+        List<UserDto> userDtoList = userFindBy.findUserDto(id);
+        if(userDtoList.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }else {
+            return new ResponseEntity<>(userDtoList,HttpStatus.OK);
         }
     }
 

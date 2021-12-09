@@ -91,8 +91,18 @@ public class OrdersService implements IOrdersService{
     }
 
     @Override
+    public Page<Orders> findAllByMerchantOrderByOrderTime(User user, Pageable pageable) {
+        return ordersRepository.findAllByMerchantOrderByOrderTimeDesc(user,pageable);
+    }
+
+    @Override
     public Page<Orders> findAllByUserOrderByOrderTimeDesc(User user, Pageable pageable) {
         return ordersRepository.findAllByUserOrderByOrderTimeDesc(user, pageable);
+    }
+
+    @Override
+    public Page<Orders> findAllByMerchantAndOrderStatusNameOrderByOrderTime(User user, String name, Pageable pageable) {
+        return ordersRepository.findAllByMerchantAndOrderStatusNameOrderByOrderTimeDesc(user,name,pageable);
     }
 
     @Override

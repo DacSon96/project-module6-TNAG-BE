@@ -1,10 +1,17 @@
 package com.codegym.project.controller;
 
+import com.codegym.project.dish.Dish;
+import com.codegym.project.dish.DishForm;
+import com.codegym.project.role.IRoleService;
+import com.codegym.project.role.Role;
 import com.codegym.project.users.userAddress.IUserAddressService;
 import com.codegym.project.users.userAddress.UserDeliverAddress;
+import com.codegym.project.users.userForm.UserForm;
 import com.codegym.project.users.userProfile.AvatarUploadForm;
 import com.codegym.project.users.userProfile.IUserProfileService;
 import com.codegym.project.users.userProfile.UserProfile;
+import com.codegym.project.users.userStatus.IUserStatusService;
+import com.codegym.project.users.userStatus.UserStatus;
 import com.codegym.project.users.users.IUserService;
 import com.codegym.project.users.users.User;
 import com.codegym.project.users.users.UserDto;
@@ -22,6 +29,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -36,6 +45,12 @@ public class UserController {
 
     @Autowired
     private IUserProfileService userProfileService;
+
+    @Autowired
+    private IRoleService roleService;
+
+    @Autowired
+    private IUserStatusService userStatusService;
 
     @Autowired
     private UserFindBy userFindBy;
@@ -107,7 +122,11 @@ public class UserController {
     @GetMapping("/findUserByCategory/{id}")
     public ResponseEntity<List<?>>findUserByCateory(@PathVariable("id") Long id){
         List<UserDto> userDtoList = userFindBy.findUserDto(id);
-        return new ResponseEntity<>(userDtoList,HttpStatus.OK);
+        if(userDtoList.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }else {
+            return new ResponseEntity<>(userDtoList,HttpStatus.OK);
+        }
     }
 
 }

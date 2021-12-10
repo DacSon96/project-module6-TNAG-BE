@@ -17,22 +17,30 @@ public class MerchantProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
 
     private String address;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Category> categories;
 
+    @Column(nullable = false)
     private String hotline;
 
+    @Column(nullable = false)
     private String openHours;
 
+    @Column(nullable = false)
     private String description;
 
+    @Column(columnDefinition = "text")
     private String avatar;
 
+    @Column(columnDefinition = "text")
     private String cover;
 
+    @Column(columnDefinition = "text")
     private String thumbnail;
 }

@@ -19,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -56,7 +57,6 @@ public class CartController {
         }
     }
 
-    @Secured("ROLE_USER")
     @GetMapping
     public ResponseEntity<Iterable<Cart>> getALlCartByUser(Authentication authentication) {
         User user = userService.getUserFromAuthentication(authentication);

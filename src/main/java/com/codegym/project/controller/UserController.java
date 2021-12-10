@@ -131,13 +131,9 @@ public class UserController {
         }
     }
     @GetMapping("/findUserByCategory/{id}")
-    public ResponseEntity<List<?>>findUserByCateory(@PathVariable("id") Long id){
+    public ResponseEntity<List<?>>findUserByCategory(@PathVariable("id") Long id){
         List<UserDto> userDtoList = userFindBy.findUserDto(id);
-        if(userDtoList.isEmpty()){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }else {
-            return new ResponseEntity<>(userDtoList,HttpStatus.OK);
-        }
+        return new ResponseEntity<>(userDtoList, HttpStatus.OK);
     }
 
     @PostMapping("/register/shipper")

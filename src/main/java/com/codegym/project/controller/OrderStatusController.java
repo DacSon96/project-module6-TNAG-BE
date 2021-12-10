@@ -53,13 +53,14 @@ public class OrderStatusController {
     @PutMapping
     public ResponseEntity<?> cancellationOrder(Authentication authentication, @RequestBody Orders order) {
         User user = userService.getUserFromAuthentication(authentication);
-        if (!user.getId().equals(order.getMerchant().getId())) {
+        if ((user.getId().equals(order.getMerchant().getId()))||((user.getId().equals(order.getUser().getId())))) {
+            OrderStatus orderStatus = orderStatusService.findByName(OrderStatusConst.CANCELED);
+            order.setOrderStatus(orderStatus);
+            ordersService.save(order);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-        OrderStatus orderStatus = orderStatusService.findByName(OrderStatusConst.CANCELED);
-        order.setOrderStatus(orderStatus);
-        ordersService.save(order);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/confirmShipping/{id}")

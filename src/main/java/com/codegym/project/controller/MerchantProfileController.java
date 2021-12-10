@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -65,7 +66,7 @@ public class MerchantProfileController {
         }
         Pageable pageable = PageRequest.of(page, size, sortable);
         UserStatus status = userStatusService.findByName(UserStatusConst.pending);
-        Role merchantRole = roleService.findByName(RoleConst.MERCHANT);
+        Role merchantRole = roleService.findByName(RoleConst.USER);
         Page<User> merchantPending = userService.findAllByRolesContainingAndUserStatus(merchantRole, status, pageable);
         return new ResponseEntity<>(merchantPending, HttpStatus.OK);
     }
@@ -90,16 +91,19 @@ public class MerchantProfileController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         User user = optionalUser.get();
+        Role role = roleService.findByName(RoleConst.MERCHANT);
+        List<Role> roleList = user.getRoles();
+        roleList.add(role);
+        user.setRoles(roleList);
         user.setUserStatus(approvalStatus);
         userService.save(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getById(@PathVariable Long id) {
-        Role role = roleService.findByName("ROLE_MERCHANT");
-        User user = userService.findByRolesContainingAndId(role, id);
-        if (user == null) {
+    public ResponseEntity<Optional<User>> getById(@PathVariable Long id) {
+        Optional<User> user = userService.findById(id);
+        if (!user.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(user, HttpStatus.OK);

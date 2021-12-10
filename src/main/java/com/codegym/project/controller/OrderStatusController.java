@@ -38,6 +38,18 @@ public class OrderStatusController {
         return new ResponseEntity<>(orderStatusPage, HttpStatus.OK);
     }
 
+    @PutMapping("/{id}/cancel")
+    public ResponseEntity<Orders> cancelStatus(@PathVariable Long id) {
+        Optional<Orders> orders = ordersService.findById(id);
+        if (!orders.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        OrderStatus orderStatus = orderStatusService.findByName(OrderStatusConst.CANCELED);
+        orders.get().setOrderStatus(orderStatus);
+        orders.get().setId(id);
+        return new ResponseEntity<>(ordersService.save(orders.get()), HttpStatus.OK);
+    }
+
     @PutMapping
     public ResponseEntity<?> cancellationOrder(Authentication authentication, @RequestBody Orders order) {
         User user = userService.getUserFromAuthentication(authentication);

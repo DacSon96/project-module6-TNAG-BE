@@ -72,11 +72,7 @@ public class MerchantRestController {
             String newHotline = "0" + merchantProfileForm.getHotline();
             merchantProfileForm.setHotline(newHotline);
             UserStatus userStatus = userStatusService.findByName(UserStatusConst.pending);
-            Role role = roleService.findByName(RoleConst.MERCHANT);
             User user = optionalUser.get();
-            List<Role> roleList = user.getRoles();
-            roleList.add(role);
-            user.setRoles(roleList);
             user.setUserStatus(userStatus);
 
             MultipartFile multipartFileAvatar = merchantProfileForm.getAvatar();

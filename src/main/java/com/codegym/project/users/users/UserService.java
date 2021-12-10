@@ -76,9 +76,6 @@ public class UserService implements IUserService {
     @Autowired
     private IUserRepository userRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     @Override
     public Page<User> findAll(Pageable pageable) {
         return userRepository.findAll(pageable);

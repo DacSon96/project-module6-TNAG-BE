@@ -33,7 +33,7 @@ public class OrderStatusController {
     private IOrdersService ordersService;
 
     @GetMapping
-    public ResponseEntity<Page<OrderStatus>> getAll(@PageableDefault(sort = "id", size = 5) Pageable pageable) {
+    public ResponseEntity<Page<OrderStatus>> getAll(@PageableDefault(sort = "id", size = 10) Pageable pageable) {
         Page<OrderStatus> orderStatusPage = orderStatusService.findAll(pageable);
         return new ResponseEntity<>(orderStatusPage, HttpStatus.OK);
     }

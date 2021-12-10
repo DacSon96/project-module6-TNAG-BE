@@ -35,7 +35,7 @@ public class MerchantProfileForm {
     private String openHours;
 
     @Column(nullable = false)
-    @Size(min = 50)
+    @Size(min = 10)
     private String description;
 
     //    @Column(nullable = false)

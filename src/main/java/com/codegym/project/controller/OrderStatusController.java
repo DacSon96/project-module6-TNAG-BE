@@ -38,7 +38,7 @@ public class OrderStatusController {
         return new ResponseEntity<>(orderStatusPage, HttpStatus.OK);
     }
 
-    @PutMapping("/{id}/cancel")
+    @GetMapping("/{id}/cancel")
     public ResponseEntity<Orders> cancelStatus(@PathVariable Long id) {
         Optional<Orders> orders = ordersService.findById(id);
         if (!orders.isPresent()) {

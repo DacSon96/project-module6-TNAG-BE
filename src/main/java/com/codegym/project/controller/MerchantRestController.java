@@ -52,7 +52,7 @@ public class MerchantRestController {
     private String fileUpload;
 
     @GetMapping
-    public ResponseEntity<Page<User>> findAllByRoleMerchants(@PageableDefault(sort = "username", size = 5) Pageable pageable) {
+    public ResponseEntity<Page<User>> findAllByRoleMerchants(@PageableDefault(sort = "username", size = 8) Pageable pageable) {
         Role role = roleService.findByName(RoleConst.MERCHANT);
         Page<User> userPage;
         userPage = userService.findAllByRolesContaining(role, pageable);
